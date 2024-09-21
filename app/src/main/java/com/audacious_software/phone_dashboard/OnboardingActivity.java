@@ -37,6 +37,7 @@ public class OnboardingActivity extends AppCompatActivity {
     private static final String SHOWN_BUDGET = "com.audacious_software.phone_dashboard.OnboardingActivity.SHOWN_BUDGET";
     private static final String SHOWN_CONCLUSION = "com.audacious_software.phone_dashboard.OnboardingActivity.SHOWN_CONCLUSION";
     private static final String NOTIFICATION_SHOWN = "com.audacious_software.phone_dashboard.OnboardingActivity.NOTIFICATION_SHOWN";
+    private static final String NOTIFICATION_ASKED = "com.audacious_software.phone_dashboard.OnboardingActivity.NOTIFICATION_ASKED";;
 
     private AppApplication mApp;
 
@@ -88,7 +89,13 @@ public class OnboardingActivity extends AppCompatActivity {
         }
 
         if (NotificationEvents.areNotificationsVisible(app) == false) {
-            issues.add("invisible-notifications");
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
+
+            boolean notificationsShown  = prefs.getBoolean(OnboardingActivity.NOTIFICATION_SHOWN, false);
+
+            if (notificationsShown == false) {
+                issues.add("invisible-notifications");
+            }
         }
 
         if (ForegroundApplication.hasPermissions(app) == false) {
@@ -105,15 +112,26 @@ public class OnboardingActivity extends AppCompatActivity {
     private void refresh() {
         Log.e("Phone Dashboard", "REFRESH");
 
+        try {
+            String hello = null;
+
+            Log.e("PD", hello.toString());
+        } catch (NullPointerException ex) {
+            ex.printStackTrace();
+        }
+
         String identifier = this.mApp.getIdentifier();
 
         boolean shownExplanation = OnboardingActivity.shownExplanation(this);
         boolean hasUsagePermission = ForegroundApplication.hasPermissions(this.mApp);
         boolean hasWindowPermission = OnboardingActivity.hasWindowPermission(this);
-        boolean hasNotificationPermission = NotificationEvents.areNotificationsEnabled(this);
-        boolean areNotificationVisible = NotificationEvents.areNotificationsVisible(this);
 
         boolean shownConclusion = OnboardingActivity.shownConclusion(this);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        boolean notificationsShown  = prefs.getBoolean(OnboardingActivity.NOTIFICATION_SHOWN, false);
+        boolean notificationsAsked  = prefs.getBoolean(OnboardingActivity.NOTIFICATION_ASKED, false);
 
         if (identifier == null) {
             this.showWelcome();
@@ -121,7 +139,7 @@ public class OnboardingActivity extends AppCompatActivity {
             this.showExplanation();
         } else if (!hasUsagePermission) {
             this.fetchUsagePermissions();
-        } else if (!areNotificationVisible) {
+        } else if (notificationsShown == false || notificationsAsked == false) {
             this.fetchNotificationPermissions();
         } else if (!hasWindowPermission) {
             this.fetchWindowPermissions();
@@ -130,7 +148,7 @@ public class OnboardingActivity extends AppCompatActivity {
         } else {
             this.startActivity(new Intent(this, MainActivity.class));
 
-            Logger.getInstance(this).log("nyu-onboarding-complete");
+            Logger.getInstance(this).log("phone-dashboard-onboarding-complete");
 
             this.finish();
         }
@@ -299,33 +317,63 @@ public class OnboardingActivity extends AppCompatActivity {
     private void fetchNotificationPermissions() {
         final OnboardingActivity me = this;
 
-        Log.e("PHONE DASHBOARD", "fetchNotificationPermissions");
-
         this.mToolbar.setTitle(R.string.title_notification_permissions);
         this.mToolbar.setSubtitle(R.string.subtitle_onboarding);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(me);
 
-        if (NotificationEvents.areNotificationsEnabled(me) == false && prefs.getBoolean(OnboardingActivity.NOTIFICATION_SHOWN, false) == false) {
-            SharedPreferences.Editor e = prefs.edit();
-            e.putBoolean(OnboardingActivity.NOTIFICATION_SHOWN, true);
-            e.apply();
+        boolean notificationsShown  = prefs.getBoolean(OnboardingActivity.NOTIFICATION_SHOWN, false);
+        boolean notificationsAsked  = prefs.getBoolean(OnboardingActivity.NOTIFICATION_ASKED, false);
 
-            NotificationEvents.fetchPemissions(me);
-        } else {
-            WebView webView = this.findViewById(R.id.step_webview);
-            webView.getSettings().setJavaScriptEnabled(true);
-            webView.loadUrl("file:///android_asset/html/onboarding_app_notifications.html");
+        SharedPreferences.Editor e = prefs.edit();
+
+        WebView webView = this.findViewById(R.id.step_webview);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl("file:///android_asset/html/onboarding_app_notifications.html");
+
+        if (notificationsShown & notificationsAsked) {
+            this.showPage(R.id.step_webview, R.string.action_next_arrow, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    me.refresh();
+                }
+            });
+        } else if (notificationsAsked) {
+            e.putBoolean(OnboardingActivity.NOTIFICATION_SHOWN, true);
 
             this.showPage(R.id.step_webview, R.string.action_next_arrow, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     NotificationEvents.enableVisibility(me);
+
+                    me.showPage(R.id.step_webview, R.string.action_next_arrow, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            me.refresh();
+                        }
+                    });
+                }
+            });
+        } else {
+            e.putBoolean(OnboardingActivity.NOTIFICATION_ASKED, true);
+
+            this.showPage(R.id.step_webview, R.string.action_next_arrow, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    NotificationEvents.fetchPemissions(me);
+
+                    me.showPage(R.id.step_webview, R.string.action_next_arrow, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            me.refresh();
+                        }
+                    });
                 }
             });
         }
-    }
 
+        e.apply();
+    }
 
     @SuppressLint("SetJavaScriptEnabled")
     private void showBudget() {

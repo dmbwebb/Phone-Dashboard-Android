@@ -13,6 +13,12 @@
         <androidx.preference.Preference app:title="@string/action_refresh_study_configuration" app:key="com.audacious_software.phone_dashboard.SettingsActivity.REFRESH_STUDY_CONFIG" />
         <!-- <androidx.preference.Preference app:title="@string/action_upload_data" app:summary="@string/summary_upload_data" app:key="com.audacious_software.phone_dashboard.SettingsActivity.UPLOAD_DATA" /> -->
     </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory app:title="@string/settings_additional_actions">
+        <androidx.preference.Preference app:title="@string/action_faq" app:key="com.audacious_software.phone_dashboard.SettingsActivity.FAQ" />
+        <androidx.preference.Preference app:title="@string/action_transmit_usage" app:summary="@string/label_action_transmit_usage" app:key="com.audacious_software.phone_dashboard.SettingsActivity.TRANSMIT_USAGE" />
+        <androidx.preference.Preference app:title="@string/action_usage_history" app:key="com.audacious_software.phone_dashboard.SettingsActivity.USAGE_HISTORY" />
+        <!-- <androidx.preference.Preference app:summary="@string/action_transmit_data" app:key="com.audacious_software.phone_dashboard.SettingsActivity.TRANSMIT_DATA" /> -->
+    </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory app:title="@string/settings_app_info">
         <androidx.preference.Preference app:title="@string/placeholder_app_version" app:summary="@string/label_app_version" app:key="com.audacious_software.phone_dashboard.SettingsActivity.APP_VERSION" />
         <androidx.preference.Preference app:title="@string/settings_irb_number" app:summary="@string/settings_irb_summary" />
@@ -21,7 +27,6 @@
         <androidx.preference.Preference app:title="@string/settings_acknowledgements" app:key="com.audacious_software.phone_dashboard.SettingsActivity.ACKNOWLEDGEMENTS" />
     </androidx.preference.PreferenceCategory>
     <!-- <androidx.preference.PreferenceCategory app:title="@string/settings_data_actions"> -->
-        <androidx.preference.Preference app:summary="@string/action_transmit_data" app:key="com.audacious_software.phone_dashboard.SettingsActivity.TRANSMIT_DATA" />
         <!-- Preference app:title="@string/action_data_disclosure" app:key="com.audacious_software.phone_dashboard.SettingsActivity.DATA_DISCLOSURE" /> -->
         <!-- <androidx.preference.Preference app:title="@string/action_view_data_stream" app:key="com.audacious_software.phone_dashboard.SettingsActivity.DATA_STREAM" /> -->
     <!-- </androidx.preference.PreferenceCategory> -->

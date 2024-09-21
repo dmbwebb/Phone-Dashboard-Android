@@ -27,6 +27,7 @@ import com.audacious_software.passive_data_kit.generators.device.Battery;
 import com.audacious_software.passive_data_kit.generators.device.ForegroundApplication;
 import com.audacious_software.passive_data_kit.generators.device.NotificationEvents;
 import com.audacious_software.passive_data_kit.generators.device.ScreenState;
+import com.audacious_software.passive_data_kit.generators.device.UsageEvents;
 import com.audacious_software.passive_data_kit.generators.diagnostics.AppEvent;
 import com.audacious_software.passive_data_kit.generators.diagnostics.SystemStatus;
 import com.audacious_software.passive_data_kit.transmitters.HttpTransmitter;
@@ -150,6 +151,30 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
             this.setUserId(userId);
 
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.mContext);
+
+            long lastUsageTransmitted = prefs.getLong(SettingsActivity.LAST_EVENTS_HISTORY_RETRIEVED, 0);
+
+            /* Log.e("Phone Dashboard", "lastUsageTransmitted: " + lastUsageTransmitted + " -- " + (now - lastUsageTransmitted));
+
+            if (lastUsageTransmitted > 0 && (now - lastUsageTransmitted) > 900000) {
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.e("Phone Dashboard", "Refreshing events");
+                        SharedPreferences.Editor e = prefs.edit();
+
+                        e.remove(SettingsActivity.LAST_EVENTS_HISTORY_RETRIEVED);
+                        e.commit();
+
+                        UsageEvents.getInstance(me.mContext).fetchFullHistory(false, 0);
+
+                        e.putLong(SettingsActivity.LAST_EVENTS_HISTORY_RETRIEVED, now);
+                        e.commit();
+                    }
+                });
+
+                t.start();
+            } */
 
             long lastFullBudgetTransmitted = prefs.getLong(Schedule.LAST_FULL_BUDGET_TRANSMISSION, 0);
 
@@ -328,7 +353,7 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
                     if (transmitter instanceof HttpTransmitter) {
                         HttpTransmitter httpTransmitter = (HttpTransmitter) transmitter;
 
-                        httpTransmitter.setMaxBundleSize(32);
+                        httpTransmitter.setMaxBundleSize(512);
                     }
                 }
             }

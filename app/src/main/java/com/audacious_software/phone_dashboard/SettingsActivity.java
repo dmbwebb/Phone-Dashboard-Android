@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,20 +18,30 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.audacious_software.passive_data_kit.PassiveDataKit;
 import com.audacious_software.passive_data_kit.activities.DataDisclosureActivity;
 import com.audacious_software.passive_data_kit.activities.DataStreamActivity;
+import com.audacious_software.passive_data_kit.generators.device.ForegroundApplication;
+import com.audacious_software.passive_data_kit.generators.device.UsageEvents;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SettingsActivity extends AppCompatActivity {
     public static final String TRANSMISSION_INTERVAL = "com.audacious_software.phone_dashboard.SettingsActivity.TRANSMISSION_INTERVAL";
@@ -46,6 +58,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private static final String APP_VERSION = "com.audacious_software.phone_dashboard.SettingsActivity.APP_VERSION";
 
+    private static final String FAQ = "com.audacious_software.phone_dashboard.SettingsActivity.FAQ";
+
     // private static final String RECEIVES_SUBSIDY = "com.audacious_software.phone_dashboard.SettingsActivity.RECEIVES_SUBSIDY";
     // private static final String BLOCKER_TYPE = "com.audacious_software.phone_dashboard.SettingsActivity.BLOCKER_TYPE";
     // private static final String REMAINING_BUDGET = "com.audacious_software.phone_dashboard.SettingsActivity.REMAINING_BUDGET";
@@ -58,10 +72,18 @@ public class SettingsActivity extends AppCompatActivity {
     // private static final String PERIOD_START = "com.audacious_software.phone_dashboard.SettingsActivity.PERIOD_START";
     private static final String ACKNOWLEDGEMENTS = "com.audacious_software.phone_dashboard.SettingsActivity.ACKNOWLEDGEMENTS";
     private static final String SHOW_SNOOZE_DELAY_MESSAGE = "com.audacious_software.phone_dashboard.SettingsActivity.SHOW_SNOOZE_DELAY_MESSAGE";
+    private static final String TRANSMIT_USAGE = "com.audacious_software.phone_dashboard.SettingsActivity.TRANSMIT_USAGE";
+    private static final String USAGE_HISTORY = "com.audacious_software.phone_dashboard.SettingsActivity.USAGE_HISTORY";
+    public static final String LAST_EVENTS_HISTORY_RETRIEVED = "com.audacious_software.phone_dashboard.SettingsActivity.LAST_EVENTS_HISTORY_RETRIEVED_TEST";
+    private static final String LAST_EVENTS_HISTORY_RETRIEVALS = "com.audacious_software.phone_dashboard.SettingsActivity.LAST_EVENTS_HISTORY_RETRIEVALS";
+
 
     private PhoneDashboardPreferenceFragment mSettingsFragment = null;
 
+
     public static class PhoneDashboardPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener  {
+        private Handler mHandler = new Handler();
+
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             this.setPreferencesFromResource(R.xml.settings, rootKey);
 
@@ -78,7 +100,71 @@ public class SettingsActivity extends AppCompatActivity {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(me);
             prefs.unregisterOnSharedPreferenceChangeListener(this);
 
+            this.mHandler.removeCallbacksAndMessages (null);
+
             super.onPause();
+        }
+
+        private void showUsageHistory() {
+            final SettingsActivity me = (SettingsActivity) this.getActivity();
+
+            final AppApplication app = (AppApplication) me.getApplication();
+
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
+
+            final Set<String> history = new HashSet<>(prefs.getStringSet(SettingsActivity.LAST_EVENTS_HISTORY_RETRIEVALS, new HashSet<>()));
+
+            ArrayList<Date> dates = new ArrayList<>();
+
+            DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT);
+
+            for (String historyDate : history) {
+                long timestamp = Long.parseLong(historyDate);
+
+                Date when = new Date(timestamp);
+
+                dates.add(when);
+            }
+
+            Collections.sort(dates, new Comparator<Date>() {
+                @Override
+                public int compare(Date one, Date two) {
+                    return two.compareTo(one);
+                }
+            });
+
+            String[] formattedDates = new String[history.size() + 1];
+
+            long pending = PassiveDataKit.getInstance(me).pendingTransmissions();
+
+            if (pending == 0) {
+                formattedDates[0] = me.getString(R.string.title_transmission_complete);
+            } else {
+                formattedDates[0] = me.getString(R.string.title_transmission_in_progress, pending);
+            }
+
+            int index = 1;
+
+            for (Date when : dates) {
+                formattedDates[index] = formatter.format(when);
+
+                index += 1;
+            }
+
+            ContextThemeWrapper wrapper = new ContextThemeWrapper(me, R.style.AppTheme);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(wrapper);
+
+            builder.setTitle(R.string.dialog_title_usage_history);
+
+            builder.setItems(formattedDates, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            builder.show();
         }
 
         public boolean onPreferenceTreeClick(final Preference preference)
@@ -88,6 +174,8 @@ public class SettingsActivity extends AppCompatActivity {
             final SettingsActivity me = (SettingsActivity) this.getActivity();
 
             final AppApplication app = (AppApplication) me.getApplication();
+
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app);
 
             String key = preference.getKey();
 
@@ -110,6 +198,12 @@ public class SettingsActivity extends AppCompatActivity {
                 me.startActivity(new Intent(me, DataStreamActivity.class));
 
                 AppLogger.getInstance(me).log("settings_launched_data_stream");
+
+                return true;
+            } else if (SettingsActivity.FAQ.equals(key)) {
+                me.startActivity(new Intent(me, FAQActivity.class));
+
+                AppLogger.getInstance(me).log("settings_launched_faq");
 
                 return true;
             } else if (SettingsActivity.REFRESH_STUDY_CONFIG.equals(key)) {
@@ -210,8 +304,6 @@ public class SettingsActivity extends AppCompatActivity {
                         }
                     });
 
-                    final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(me);
-
                     if (prefs.getBoolean(SettingsActivity.SHOW_SNOOZE_DELAY_MESSAGE, true)) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(me);
 
@@ -240,6 +332,120 @@ public class SettingsActivity extends AppCompatActivity {
                         listDialog.show();
                     }
                 }
+            } else if (SettingsActivity.TRANSMIT_USAGE.equals(key)) {
+                long lastPull = prefs.getLong(SettingsActivity.LAST_EVENTS_HISTORY_RETRIEVED, 0);
+
+                Calendar last = Calendar.getInstance();
+                last.setTimeInMillis(lastPull);
+                last.set(Calendar.HOUR_OF_DAY, 0);
+                last.set(Calendar.MINUTE, 0);
+                last.set(Calendar.SECOND, 0);
+                last.set(Calendar.MILLISECOND, 0);
+
+                Calendar now = Calendar.getInstance();
+                now.setTimeInMillis(System.currentTimeMillis());
+                now.set(Calendar.HOUR_OF_DAY, 0);
+                now.set(Calendar.MINUTE, 0);
+                now.set(Calendar.SECOND, 0);
+                now.set(Calendar.MILLISECOND, 0);
+
+                if (now.getTimeInMillis() == last.getTimeInMillis()) {
+                    this.showUsageHistory();
+
+                    return true;
+                } else {
+                    if (ForegroundApplication.hasPermissions(me)) {
+                        ContextThemeWrapper wrapper = new ContextThemeWrapper(me, R.style.AppTheme);
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(wrapper);
+
+                        builder.setTitle(R.string.dialog_title_missing_app_usage_permission);
+                        builder.setMessage(R.string.dialog_message_missing_app_usage_permission);
+                        builder.setCancelable(false);
+
+                        builder.setPositiveButton(R.string.action_continue, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ForegroundApplication.fetchPermissions(me);
+
+                            }
+                        });
+
+                        builder.create().show();
+                    } else {
+                        ContextThemeWrapper wrapper = new ContextThemeWrapper(me, R.style.AppTheme);
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(wrapper);
+
+                        builder.setTitle(R.string.dialog_title_fetching_usage_history);
+                        builder.setMessage(R.string.dialog_message_fetching_usage_history);
+                        builder.setCancelable(false);
+
+                        final AlertDialog fetchingDialog = builder.show();
+
+                        Runnable runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                UsageEvents.getInstance(app).fetchFullHistory(true, 0);
+
+                                me.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        long now = System.currentTimeMillis();
+
+                                        SharedPreferences.Editor e = prefs.edit();
+                                        e.putLong(SettingsActivity.LAST_EVENTS_HISTORY_RETRIEVED, now);
+
+                                        final Set<String> history = new HashSet<>(prefs.getStringSet(SettingsActivity.LAST_EVENTS_HISTORY_RETRIEVALS, new HashSet<>()));
+
+                                        history.add("" + now);
+
+                                        e.putStringSet(SettingsActivity.LAST_EVENTS_HISTORY_RETRIEVALS, history);
+
+                                        e.commit();
+
+                                        ContextThemeWrapper wrapper = new ContextThemeWrapper(me, R.style.AppTheme);
+
+                                        fetchingDialog.setCancelable(true);
+                                        fetchingDialog.cancel();
+
+                                        Schedule.getInstance(me).transmitData();
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(wrapper);
+
+                                        builder.setTitle(R.string.dialog_title_usage_fetched);
+                                        builder.setMessage(R.string.dialog_message_usage_fetched);
+
+                                        builder.setPositiveButton(R.string.action_view_export_history, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                fragment.onPreferenceTreeClick(preference);
+                                            }
+                                        });
+
+                                        builder.setNegativeButton(R.string.action_close, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        });
+
+                                        builder.show();
+                                    }
+                                });
+                            }
+                        };
+
+                        Thread fetch = new Thread(runnable);
+                        fetch.start();
+                    }
+                }
+
+                return true;
+            } else if (SettingsActivity.USAGE_HISTORY.equals(key)) {
+                this.showUsageHistory();
+
+                return true;
             }
 
             return super.onPreferenceTreeClick(preference);
@@ -250,6 +456,8 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         public void onResume() {
+            final PhoneDashboardPreferenceFragment me = this;
+
             super.onResume();
 
             this.refresh();
@@ -277,11 +485,9 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
 
-            Preference transmitData = this.findPreference(SettingsActivity.TRANSMIT_DATA);
-            String transmitTitle = me.getString(R.string.action_transmit_data_pending, PassiveDataKit.getInstance(me).pendingTransmissions());
-            transmitData.setTitle(transmitTitle);
+            // this.updatePendingTransmissions();
 
-            transmitData.setVisible(false);
+            // transmitData.setVisible(false);
 
             // Preference subsidy = this.findPreference(SettingsActivity.RECEIVES_SUBSIDY);
             // Preference blockerType = this.findPreference(SettingsActivity.BLOCKER_TYPE);
@@ -410,6 +616,27 @@ public class SettingsActivity extends AppCompatActivity {
             this.onSharedPreferenceChanged(prefs, null);
 
             prefs.registerOnSharedPreferenceChangeListener(this);
+        }
+
+        private void updatePendingTransmissions() {
+//            final PhoneDashboardPreferenceFragment me = this;
+//
+//            long pending = PassiveDataKit.getInstance(me.getActivity()).pendingTransmissions();
+//
+//            Preference transmitData = me.findPreference(SettingsActivity.TRANSMIT_DATA);
+//
+//            if (pending == 0) {
+//                transmitData.setTitle(R.string.title_transmission_complete);
+//            } else {
+//                transmitData.setTitle(R.string.title_transmission_in_progress);
+//            }
+//
+//            this.mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    me.updatePendingTransmissions();
+//                }
+//            }, 5000);
         }
     }
 

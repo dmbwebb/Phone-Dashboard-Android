@@ -34,6 +34,7 @@
         <activity android:name=".SettingsActivity" android:label="@string/app_name" android:theme="@style/AppTheme" android:exported="false" />
         <activity android:name=".SettingsAcknowledgementsActivity" android:label="@string/app_name" android:exported="false" />
         <activity android:name=".EditBudgetActivity" android:label="@string/app_name" android:exported="false" />
+        <activity android:name=".FAQActivity" android:label="@string/app_name" android:exported="false" />
         <activity android:name=".WarningActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Transparent"

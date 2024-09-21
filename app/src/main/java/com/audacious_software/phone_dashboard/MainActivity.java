@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import com.audacious_software.passive_data_kit.Logger;
 import com.audacious_software.passive_data_kit.activities.DiagnosticsActivity;
-import com.github.javiersantos.appupdater.AppUpdater;
-import com.github.javiersantos.appupdater.enums.UpdateFrom;
+// import com.github.javiersantos.appupdater.AppUpdater;
+// import com.github.javiersantos.appupdater.enums.UpdateFrom;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Calendar;
@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, 5000);
 
+            /*
             if (app.promptForMissingRequirements(this) == false) {
                 AppUpdater appUpdater = new AppUpdater(this);
                 appUpdater.setUpdateFrom(UpdateFrom.JSON);
@@ -175,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
                 appUpdater.start();
             }
+            */
         }
 
         app.logAppAppearance(System.currentTimeMillis(), "main-activity");
