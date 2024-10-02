@@ -354,7 +354,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                     return true;
                 } else {
-                    if (ForegroundApplication.hasPermissions(me)) {
+                    if (ForegroundApplication.hasPermissions(me) == false) {
                         ContextThemeWrapper wrapper = new ContextThemeWrapper(me, R.style.AppTheme);
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(wrapper);
