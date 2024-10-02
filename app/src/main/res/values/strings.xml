@@ -15,7 +15,7 @@
     <string name="url_opt_in">https://chicago.audacious-software.com/study/activate/%1$s.json</string>
     <string name="url_latest_version">https://chicago.audacious-software.com/study/latest-version.json</string>
 
-    <string name="onboarding_sign_in">Welcome to STARS Dashboard. This app has been developed for the Punjab Youth Wellness Study.\n\nTo continue, please enter your e-mail address below:</string>
+    <string name="onboarding_sign_in">Welcome to STARS Dashboard. This app has been developed for the STARS Study.\n\nTo continue, please enter your e-mail address below:</string>
     <string name="hint_onboarding_email">E-Mail Address</string>
 
     <string name="message_no_user_budgets">The selected configuration does not permit app budgets to be configured.\n\nTap the "Next" button above to continue.</string>
