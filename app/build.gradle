@@ -10,8 +10,8 @@ android {
         applicationId "com.audacious_software.phone_dashboard.chicago"
         minSdkVersion 24
         targetSdk 35
-        versionCode 90
-        versionName "90"
+        versionCode 91
+        versionName "91"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         manifestPlaceholders = [
                 appAuthRedirectScheme: "NOT-USED",
