@@ -7,17 +7,17 @@ android {
     compileSdk 35
 
     defaultConfig {
-        applicationId "com.audacious_software.phone_dashboard.india"
+        applicationId "com.audacious_software.phone_dashboard.chicago"
         minSdkVersion 24
         targetSdk 35
-        versionCode 89
-        versionName "89"
+        versionCode 90
+        versionName "90"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         manifestPlaceholders = [
                 appAuthRedirectScheme: "NOT-USED",
         ]
 
-        manifestPlaceholders += ["APP_NAME": "YouthWell Punjab Dashboard"]
+        manifestPlaceholders += ["APP_NAME": "STARS Dashboard"]
     }
 
     ndkVersion '21.3.6528147'
