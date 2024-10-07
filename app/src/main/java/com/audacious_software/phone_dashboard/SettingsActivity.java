@@ -255,7 +255,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 ClipboardManager clipboard = (ClipboardManager) me.getSystemService(CLIPBOARD_SERVICE);
 
-                ClipData clip = ClipData.newPlainText("Phone Dashboard App Code", identifier);
+                ClipData clip = ClipData.newPlainText("STARS Dashboard App Code", identifier);
 
                 clipboard.setPrimaryClip(clip);
 

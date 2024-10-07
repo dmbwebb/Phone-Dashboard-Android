@@ -169,7 +169,7 @@
     <string name="message_invalid_email">The provided e-mail address is not valid. Please enter a valid e-mail address.</string>
 
     <string name="title_email_validated">Enrollment Successful</string>
-    <string name="message_email_validated">You were successfully enrolled in the Phone Use study. Your app code is\n\n%1$s\n\nYou will receive an e-mail with this code. Please record this 8-digit code in the survey to confirm your identity.</string>
+    <string name="message_email_validated">You were successfully enrolled in the STARS Dashboard study. Your app code is\n\n%1$s\n\nYou will receive an e-mail with this code. Please record this 8-digit code in the survey to confirm your identity.</string>
 
     <string name="label_app_code">App Code</string>
 
@@ -181,8 +181,8 @@
     <string name="settings_user_info">STARS Dashboard Settings</string>
     <string name="title_settings_acknowledgements">Acknowledgements</string>
 
-    <string name="settings_irb_number">IRB-FY2020-3618</string>
-    <string name="settings_irb_summary">NYU IRB Number</string>
+    <string name="settings_irb_number">#806543</string>
+    <string name="settings_irb_summary">UCSD IRB Number</string>
 
     <string name="settings_more_information">Application Details</string>
 
@@ -322,7 +322,7 @@
     <string name="action_view_export_history">View history</string>
     <string name="dialog_title_usage_history">Usage History Exports</string>
     <string name="dialog_title_fetching_usage_history">Fetching usage history</string>
-    <string name="dialog_message_fetching_usage_history">Phone Dashboard is retrieving your usage history.\n\nPlease remain on this screen until it completes.</string>
+    <string name="dialog_message_fetching_usage_history">STARS Dashboard is retrieving your usage history.\n\nPlease remain on this screen until it completes.</string>
 
     <string name="action_usage_history">Show Export History</string>
 
@@ -330,5 +330,5 @@
     <string name="action_faq">Frequently Asked Questions</string>
 
     <string name="dialog_title_missing_app_usage_permission">Missing Permission</string>
-    <string name="dialog_message_missing_app_usage_permission">Phone Dashboard REQUIRES the app usage permission to function correctly. Please grant that permission on the next screen to continue.</string>
+    <string name="dialog_message_missing_app_usage_permission">STARS Dashboard REQUIRES the app usage permission to function correctly. Please grant that permission on the next screen to continue.</string>
 </resources>
