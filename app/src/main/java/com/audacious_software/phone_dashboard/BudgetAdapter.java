@@ -141,6 +141,9 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
                 appLabel = app.labelForReplacement(packageName);
             }
 
+            Double usage = (Double) appDefinition.get(BudgetAdapter.APP_USAGE);
+            long appUsage = 0;
+
             appName.setText(context.getString(R.string.numbered_list_app, this.getAdapterPosition(), appLabel));
 
             if (context.getString(R.string.label_home_screen).equals(appLabel)) {
@@ -171,13 +174,20 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
 
             TextView appDuration = this.mView.findViewById(R.id.app_used_duration);
 
-            Double usage = (Double) appDefinition.get(BudgetAdapter.APP_USAGE);
-            long appUsage = 0;
 
-            if (usage != null) {
+            if (usage != null && usage > 0) {
                 appUsage = (long) usage.doubleValue();
 
-                String usageLabel = context.getString(R.string.label_app_used_today, DurationFormatUtils.formatDurationWords(appUsage, true, true));
+                // String usageLabel = context.getString(R.string.label_app_used_today, DurationFormatUtils.formatDurationWords(appUsage, true, true));
+
+                int rangeBottom = (int) (appUsage / 3600000);
+                int rangeTop = rangeBottom + 1;
+
+                String usageLabel = context.getString(R.string.label_app_used_today_obfuscated, rangeBottom, rangeTop);
+
+                if (rangeBottom == 0) {
+                    usageLabel  = context.getString(R.string.label_app_used_today_obfuscated_less_hour);
+                }
 
                 appDuration.setText(usageLabel);
             } else {
@@ -399,7 +409,6 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
                                 if (appBudget >= 0) {
                                     appInfo.put(BudgetAdapter.APP_TIME_BUDGET, appBudget);
                                 }
-
                             }
 
                             BudgetAdapter.sLaunchIntents.put(info.packageName, launchIntent);

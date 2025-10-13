@@ -15,8 +15,8 @@
     <string name="url_opt_in">https://chicago.audacious-software.com/study/activate/%1$s.json</string>
     <string name="url_latest_version">https://chicago.audacious-software.com/study/latest-version.json</string>
 
-    <string name="onboarding_sign_in">Welcome to STARS Dashboard. This app has been developed for the STARS Study.\n\nTo continue, please enter your e-mail address below:</string>
-    <string name="hint_onboarding_email">E-Mail Address</string>
+    <string name="onboarding_sign_in">Welcome to STARS Dashboard. This app has been developed for the STARS Study.\n\nTo continue, please enter your phone number (XXX-XXX-XXXX) below:</string>
+    <string name="hint_onboarding_email">Phone Number</string>
 
     <string name="message_no_user_budgets">The selected configuration does not permit app budgets to be configured.\n\nTap the "Next" button above to continue.</string>
 
@@ -165,8 +165,8 @@
     <string name="label_app_period_start">Start of Current Phase</string>
     <string name="period_start_unknown">Unknown Phase Start</string>
 
-    <string name="title_invalid_email">Invalid E-Mail Address</string>
-    <string name="message_invalid_email">The provided e-mail address is not valid. Please enter a valid e-mail address.</string>
+    <string name="title_invalid_email">Invalid Phone Number</string>
+    <string name="message_invalid_email">The provided phone number is not valid. Please enter a valid phone number in the format (XXX-XXX-XXXX).</string>
 
     <string name="title_email_validated">Enrollment Successful</string>
     <string name="message_email_validated">You were successfully enrolled in the STARS Dashboard study. Your app code is\n\n%1$s\n\nYou will receive an e-mail with this code. Please record this 8-digit code in the survey to confirm your identity.</string>
@@ -331,4 +331,7 @@
 
     <string name="dialog_title_missing_app_usage_permission">Missing Permission</string>
     <string name="dialog_message_missing_app_usage_permission">STARS Dashboard REQUIRES the app usage permission to function correctly. Please grant that permission on the next screen to continue.</string>
+
+    <string name="label_app_used_today_obfuscated">Between %1$d and %2$d hours</string>
+    <string name="label_app_used_today_obfuscated_less_hour">Less than an hour</string>
 </resources>

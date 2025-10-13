@@ -210,6 +210,10 @@ public class MainActivity extends AppCompatActivity {
 
         final MainActivity me = this;
 
+        if (DiagnosticsActivity.diagnosticItemSelected(this, item)) {
+            return true;
+        }
+
         if (id == R.id.action_settings) {
             Intent settings = new Intent(this, SettingsActivity.class);
             this.startActivity(settings);
@@ -250,11 +254,11 @@ public class MainActivity extends AppCompatActivity {
             });
 
             Toast.makeText(this, R.string.toast_refreshing_configuration, Toast.LENGTH_LONG).show();
-//        } else if (id == R.id.action_diagnostics) {
-//            Intent diagnosticsIntent = new Intent(this, DiagnosticsActivity.class);
-//            this.startActivity(diagnosticsIntent);
-//
-//            return super.onOptionsItemSelected(item);
+        // } else if (id == R.id.action_diagnostics) {
+        //     Intent diagnosticsIntent = new Intent(this, DiagnosticsActivity.class);
+        //     this.startActivity(diagnosticsIntent);
+
+        //     return super.onOptionsItemSelected(item);
         }
 
         return super.onOptionsItemSelected(item);

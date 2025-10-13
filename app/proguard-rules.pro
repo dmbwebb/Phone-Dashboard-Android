@@ -44,3 +44,7 @@
 -keep class com.audacious_software.phone_dashboard.** { *; }
 -keep class org.xmlpull.v1.** { *; }
 -keep class okhttp3.Headers { *; }
+
+-dontwarn java.awt.*
+-keep class com.sun.jna.* { *; }
+-keepclassmembers class * extends com.sun.jna.* { public *; }

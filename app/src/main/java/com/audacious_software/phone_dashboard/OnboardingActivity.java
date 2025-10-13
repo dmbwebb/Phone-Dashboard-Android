@@ -28,9 +28,11 @@ import com.google.android.material.textfield.TextInputEditText;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.WindowCompat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class OnboardingActivity extends AppCompatActivity {
     private static final String SHOWN_EXPLANATION = "com.audacious_software.phone_dashboard.OnboardingActivity.SHOWN_EXPLANATION";
@@ -54,6 +56,8 @@ public class OnboardingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        WindowCompat.setDecorFitsSystemWindows(this.getWindow(), true);
 
         this.setContentView(R.layout.activity_onboarding);
         this.mToolbar = findViewById(R.id.toolbar);
@@ -213,7 +217,9 @@ public class OnboardingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final String email = emailField.getText().toString().trim();
 
-                if (TextUtils.isEmpty(email) || Patterns.EMAIL_ADDRESS.matcher(email).matches() == false) {
+                Pattern phonePattern = Pattern.compile("\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d");
+
+                if (TextUtils.isEmpty(email) || (Patterns.EMAIL_ADDRESS.matcher(email).matches() == false && phonePattern.matcher(email).matches() == false)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(me);
                     builder.setTitle(R.string.title_invalid_email);
                     builder.setMessage(R.string.message_invalid_email);

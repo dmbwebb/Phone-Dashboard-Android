@@ -14,11 +14,12 @@
     <uses-permission android:name="android.permission.BLUETOOTH" tools:node="remove" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" tools:node="remove" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" tools:node="remove" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" tools:node="remove" />
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher_stars"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_stars_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
@@ -33,7 +34,7 @@
         <activity android:name=".OnboardingActivity" android:screenOrientation="portrait" android:launchMode="singleTop" android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity" android:exported="false" />
         <activity android:name=".SettingsActivity" android:label="@string/app_name" android:theme="@style/AppTheme" android:exported="false" />
-        <activity android:name=".SettingsAcknowledgementsActivity" android:label="@string/app_name" android:exported="false" />
+        <activity android:name=".SettingsAcknowledgementsActivity" android:label="@string/app_name" android:exported="false"  />
         <activity android:name=".EditBudgetActivity" android:label="@string/app_name" android:exported="false" />
         <activity android:name=".FAQActivity" android:label="@string/app_name" android:exported="false" />
         <activity android:name=".WarningActivity"
