@@ -208,12 +208,6 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
 
             ImageView fitsbyIcon = this.mView.findViewById(R.id.icon_fitsby);
             fitsbyIcon.setVisibility(View.GONE);
-
-            if (((Integer) appDefinition.get(BudgetAdapter.APP_PRIORITY)).intValue() < 100) {
-                fitsbyIcon.setVisibility(View.VISIBLE);
-            } else {
-                fitsbyIcon.setVisibility(View.GONE);
-            }
         }
     }
 
@@ -503,19 +497,10 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
                                 Collections.sort(me.mInstalledPackages, new Comparator<String>() {
                                     @Override
                                     public int compare(String one, String two) {
-                                        Integer onePriority = (Integer) me.mAppInfos.get(one).get(BudgetAdapter.APP_PRIORITY);
-                                        Integer twoPriority = (Integer) me.mAppInfos.get(two).get(BudgetAdapter.APP_PRIORITY);
-
-                                        int result = onePriority.compareTo(twoPriority);
-
-                                        if (result != 0) {
-                                            return result;
-                                        }
-
                                         Double oneUsage = (Double) me.mAppInfos.get(one).get(BudgetAdapter.APP_USAGE);
                                         Double twoUsage = (Double) me.mAppInfos.get(two).get(BudgetAdapter.APP_USAGE);
 
-                                        result = twoUsage.compareTo(oneUsage);
+                                        int result = twoUsage.compareTo(oneUsage);
 
                                         if (result == 0) {
                                             String oneName = (String) me.mAppInfos.get(one).get(BudgetAdapter.APP_LABEL);
@@ -536,19 +521,10 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
                     Collections.sort(me.mInstalledPackages, new Comparator<String>() {
                         @Override
                         public int compare(String one, String two) {
-                            Integer onePriority = (Integer) me.mAppInfos.get(one).get(BudgetAdapter.APP_PRIORITY);
-                            Integer twoPriority = (Integer) me.mAppInfos.get(two).get(BudgetAdapter.APP_PRIORITY);
-
-                            int result = onePriority.compareTo(twoPriority);
-
-                            if (result != 0) {
-                                return result;
-                            }
-
                             Double oneUsage = (Double) me.mAppInfos.get(one).get(BudgetAdapter.APP_USAGE);
                             Double twoUsage = (Double) me.mAppInfos.get(two).get(BudgetAdapter.APP_USAGE);
 
-                            result = twoUsage.compareTo(oneUsage);
+                            int result = twoUsage.compareTo(oneUsage);
 
                             if (result == 0) {
                                 String oneName = (String) me.mAppInfos.get(one).get(BudgetAdapter.APP_LABEL);
