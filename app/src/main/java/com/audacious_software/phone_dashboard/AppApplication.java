@@ -167,6 +167,7 @@ public class AppApplication extends Application implements PassiveDataKitApplica
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(baseUrl.scheme())
                 .host(baseUrl.host())
+                .port(baseUrl.port())
                 .encodedPath(baseUrl.encodedPath())
                 .build();
 
@@ -419,6 +420,7 @@ public class AppApplication extends Application implements PassiveDataKitApplica
             HttpUrl url = new HttpUrl.Builder()
                     .scheme(baseUrl.scheme())
                     .host(baseUrl.host())
+                    .port(baseUrl.port())
                     .encodedPath(baseUrl.encodedPath())
                     .build();
 

@@ -373,6 +373,7 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
             HttpUrl url = new HttpUrl.Builder()
                     .scheme(baseUrl.scheme())
                     .host(baseUrl.host())
+                    .port(baseUrl.port())
                     .encodedPath(baseUrl.encodedPath())
                     .addQueryParameter("id", userId)
                     .addQueryParameter("context", this.mContext.getPackageName())
