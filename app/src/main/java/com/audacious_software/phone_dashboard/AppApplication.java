@@ -30,7 +30,7 @@ import com.audacious_software.passive_data_kit.generators.device.ForegroundAppli
 import com.github.anrwatchdog.ANRError;
 import com.github.anrwatchdog.ANRWatchDog;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.FirebaseApp;
+// import com.google.firebase.FirebaseApp; // Disabled - no valid Firebase config
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
@@ -119,7 +119,7 @@ public class AppApplication extends Application implements PassiveDataKitApplica
 
         final AppApplication me = this;
 
-        FirebaseApp.initializeApp(me);
+        // FirebaseApp.initializeApp(me); // Disabled - no valid Firebase config
 
         HandlerThread thread = new HandlerThread("app-background-tasks");
         thread.start();

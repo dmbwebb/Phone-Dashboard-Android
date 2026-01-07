@@ -344,7 +344,7 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
 
             pdkInstance.start();
 
-            pdkInstance.transmitTokens();
+            // pdkInstance.transmitTokens(); // Disabled - no valid Firebase config
 
             Generators.getInstance(this.mContext).addNewGeneratorUpdatedListener(this);
         } catch (JSONException e) {
