@@ -130,7 +130,7 @@ public class OnboardingActivity extends AppCompatActivity {
         } else {
             this.startActivity(new Intent(this, MainActivity.class));
 
-            Logger.getInstance(this).log("nyu-onboarding-complete");
+            Logger.getInstance(this).log("harvard-onboarding-complete");
 
             this.finish();
         }

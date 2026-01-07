@@ -283,7 +283,7 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
 
         payload.put("issues", issues.toString());
 
-        Logger.getInstance(this.mContext).log("nyu-app-issue-notification", payload);
+        Logger.getInstance(this.mContext).log("harvard-app-issue-notification", payload);
     }
 
     private void dismissAttentionPrompt() {
