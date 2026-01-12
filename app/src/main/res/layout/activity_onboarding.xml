@@ -1,63 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/surfaceWhite"
+    android:fitsSystemWindows="true">
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:background="@color/surfaceWhite"
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/surfaceWhite"
+            app:titleTextColor="@color/toolbarTitle"
+            app:titleTextAppearance="@style/ToolbarTitle"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider" />
+
     </com.google.android.material.appbar.AppBarLayout>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <FrameLayout android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <LinearLayout android:id="@+id/step_welcome"
+
+                <LinearLayout
+                    android:id="@+id/step_welcome"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="64dp"
+                    android:paddingBottom="80dp"
                     android:orientation="vertical"
                     android:focusableInTouchMode="true"
                     android:focusable="true"
                     android:clickable="true">
-                    <TextView android:text="@string/onboarding_sign_in"
+
+                    <!-- Welcome Header Card -->
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
-                        style="@style/TextAppearance.MaterialComponents.Body1" />
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/backgroundMain">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="20dp">
+
+                            <TextView
+                                android:text="@string/onboarding_sign_in"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textColor="@color/textSecondary"
+                                android:lineSpacingMultiplier="1.4" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Email Input -->
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        style="@style/Widget.App.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_onboarding_email"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginBottom="16dp"
-                        android:layout_marginLeft="32dp"
-                        android:layout_marginRight="32dp">
+                        android:layout_marginStart="24dp"
+                        android:layout_marginEnd="24dp"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusBottomEnd="12dp">
+
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/field_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textEmailAddress" />
+                            android:inputType="textEmailAddress"
+                            android:textColor="@color/textPrimary"
+                            android:textSize="16sp" />
+
                     </com.google.android.material.textfield.TextInputLayout>
-                    <View android:layout_width="match_parent"
+
+                    <View
+                        android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1" />
                 </LinearLayout>
             </FrameLayout>
         </ScrollView>
-        <WebView android:id="@+id/step_webview"
+
+        <WebView
+            android:id="@+id/step_webview"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

@@ -1,45 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary Colors - Fresh Mint/Teal -->
-    <color name="colorPrimary">#10B981</color>
-    <color name="colorPrimaryDark">#059669</color>
-    <color name="colorPrimaryLight">#34D399</color>
-    <color name="colorAccent">#10B981</color>
+    <!-- Primary Colors - Sophisticated Emerald -->
+    <color name="colorPrimary">#059669</color>
+    <color name="colorPrimaryDark">#047857</color>
+    <color name="colorPrimaryLight">#10B981</color>
+    <color name="colorAccent">#059669</color>
 
-    <!-- Gradient Colors (for app bar) -->
-    <color name="gradientStart">#FEF9C3</color>
-    <color name="gradientMiddle">#D1FAE5</color>
-    <color name="gradientEnd">#DDD6FE</color>
+    <!-- Header/Toolbar -->
+    <color name="toolbarBackground">#FFFFFF</color>
+    <color name="toolbarTitle">#111827</color>
+    <color name="toolbarIcon">#6B7280</color>
 
     <!-- Gauge Colors (usage indicators) -->
-    <color name="gaugeGreen">#4ADE80</color>
-    <color name="gaugeYellow">#FACC15</color>
-    <color name="gaugeOrange">#FB923C</color>
-    <color name="gaugeRed">#F87171</color>
+    <color name="gaugeGreen">#10B981</color>
+    <color name="gaugeYellow">#F59E0B</color>
+    <color name="gaugeOrange">#F97316</color>
+    <color name="gaugeRed">#EF4444</color>
 
     <!-- Surface Colors -->
     <color name="surfaceWhite">#FFFFFF</color>
-    <color name="surfaceLight">#FAFAFA</color>
+    <color name="surfaceLight">#F9FAFB</color>
     <color name="surfaceCard">#FFFFFF</color>
-    <color name="backgroundMain">#F9FAFB</color>
+    <color name="backgroundMain">#F3F4F6</color>
 
     <!-- Text Colors -->
-    <color name="textPrimary">#1F2937</color>
+    <color name="textPrimary">#111827</color>
     <color name="textSecondary">#6B7280</color>
     <color name="textMuted">#9CA3AF</color>
     <color name="textOnPrimary">#FFFFFF</color>
-    <color name="textOnGradient">#1F2937</color>
+    <color name="textOnGradient">#111827</color>
 
     <!-- UI Elements -->
     <color name="divider">#E5E7EB</color>
-    <color name="ripple">#1410B981</color>
+    <color name="tabInactive">#9CA3AF</color>
+    <color name="tabActive">#059669</color>
+    <color name="ripple">#14059669</color>
     <color name="shadowColor">#0D000000</color>
 
     <!-- Status Colors -->
-    <color name="statusSuccess">#10B981</color>
-    <color name="statusWarning">#F59E0B</color>
-    <color name="statusError">#EF4444</color>
+    <color name="statusSuccess">#059669</color>
+    <color name="statusWarning">#D97706</color>
+    <color name="statusError">#DC2626</color>
 
     <!-- Legacy (for compatibility) -->
-    <color name="colorNotification">#10B981</color>
+    <color name="colorNotification">#059669</color>
+
+    <!-- Deprecated - keeping for any remaining references -->
+    <color name="gradientStart">#FFFFFF</color>
+    <color name="gradientMiddle">#FFFFFF</color>
+    <color name="gradientEnd">#FFFFFF</color>
 </resources>
