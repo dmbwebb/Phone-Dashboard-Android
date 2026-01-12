@@ -4,14 +4,14 @@ plugins {
 
 android {
     namespace 'com.audacious_software.phone_dashboard'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
-        applicationId "com.audacious_software.phone_dashboard"
+        applicationId "com.smartphones.colombia.phonedashboard"
         minSdkVersion 24
-        targetSdk 34
-        versionCode 81
-        versionName "81"
+        targetSdk 35
+        versionCode 82
+        versionName "82"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         manifestPlaceholders = [
                 appAuthRedirectScheme: "NOT-USED"
