@@ -1,7 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#57068c</color>
-    <color name="colorPrimaryDark">#220337</color>
-    <color name="colorAccent">#28619e</color>
-    <color name="colorNotification">#57068c</color>
+    <!-- Primary Colors - Fresh Mint/Teal -->
+    <color name="colorPrimary">#10B981</color>
+    <color name="colorPrimaryDark">#059669</color>
+    <color name="colorPrimaryLight">#34D399</color>
+    <color name="colorAccent">#10B981</color>
+
+    <!-- Gradient Colors (for app bar) -->
+    <color name="gradientStart">#FEF9C3</color>
+    <color name="gradientMiddle">#D1FAE5</color>
+    <color name="gradientEnd">#DDD6FE</color>
+
+    <!-- Gauge Colors (usage indicators) -->
+    <color name="gaugeGreen">#4ADE80</color>
+    <color name="gaugeYellow">#FACC15</color>
+    <color name="gaugeOrange">#FB923C</color>
+    <color name="gaugeRed">#F87171</color>
+
+    <!-- Surface Colors -->
+    <color name="surfaceWhite">#FFFFFF</color>
+    <color name="surfaceLight">#FAFAFA</color>
+    <color name="surfaceCard">#FFFFFF</color>
+    <color name="backgroundMain">#F9FAFB</color>
+
+    <!-- Text Colors -->
+    <color name="textPrimary">#1F2937</color>
+    <color name="textSecondary">#6B7280</color>
+    <color name="textMuted">#9CA3AF</color>
+    <color name="textOnPrimary">#FFFFFF</color>
+    <color name="textOnGradient">#1F2937</color>
+
+    <!-- UI Elements -->
+    <color name="divider">#E5E7EB</color>
+    <color name="ripple">#1410B981</color>
+    <color name="shadowColor">#0D000000</color>
+
+    <!-- Status Colors -->
+    <color name="statusSuccess">#10B981</color>
+    <color name="statusWarning">#F59E0B</color>
+    <color name="statusError">#EF4444</color>
+
+    <!-- Legacy (for compatibility) -->
+    <color name="colorNotification">#10B981</color>
 </resources>
