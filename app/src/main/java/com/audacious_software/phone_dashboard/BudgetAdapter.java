@@ -22,8 +22,10 @@ import com.audacious_software.passive_data_kit.generators.device.ForegroundAppli
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -618,7 +620,8 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
                 daysObserved = this.mDays;
             }
 
-            DateFormat format = android.text.format.DateFormat.getMediumDateFormat(this.mContext);
+            // Use compact date format: "d MMM" (e.g., "9 Jan" or "9 ene")
+            DateFormat format = new SimpleDateFormat("d MMM", Locale.getDefault());
 
             cal = Calendar.getInstance();
             cal.setTimeInMillis(this.mStart);
@@ -628,16 +631,15 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
             cal.set(Calendar.MILLISECOND, 0);
 
             long when = cal.getTimeInMillis();
+            long now = System.currentTimeMillis();
 
             if (this.mDays == 0) {
                 when = 0;
             } else if (this.mDays > 1) {
+                // Calculate start date based on actual days observed
                 cal.add(Calendar.DATE, 0 - ((int) daysObserved) + 1);
-
                 when = cal.getTimeInMillis();
             }
-
-            long now = System.currentTimeMillis();
 
             String start = format.format(new Date(when));
             String finish = format.format(new Date(now));
@@ -652,7 +654,8 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
 
             if (this.mDays == 1) {
                 title = this.mContext.getString(R.string.title_average_daily_usage_today);
-            } else if (start.equals(finish)) {
+            } else if (daysObserved <= 1 || start.equals(finish)) {
+                // Only show single date if we truly have 1 day or less of data
                 title = this.mContext.getString(R.string.title_average_daily_usage_single, start);
             }
 
