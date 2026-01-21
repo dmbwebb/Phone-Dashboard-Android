@@ -1,0 +1,265 @@
+<resources>
+    <!-- Spanish (Latin American) translations for Phone Dashboard -->
+    <!-- URLs remain unchanged - they point to the same server -->
+
+    <!-- App name stays in English as requested -->
+    <string name="app_name">Phone Dashboard</string>
+
+    <string name="action_data_stream">Flujo de Datos</string>
+    <string name="action_transmit_data">Transmitir Datos</string>
+
+    <string name="onboarding_sign_in">Bienvenido a Phone Dashboard. Esta aplicación ha sido desarrollada para el Estudio Harvard sobre el Uso del Teléfono.\n\nPara continuar, ingrese su dirección de correo electrónico:</string>
+    <string name="hint_onboarding_email">Correo Electrónico</string>
+
+    <string name="message_no_user_budgets">La configuración seleccionada no permite establecer límites de uso de aplicaciones.\n\nToque el botón "Siguiente" arriba para continuar.</string>
+
+    <string name="title_onboarding">¡Bienvenido!</string>
+    <string name="subtitle_onboarding">Configuración de Phone Dashboard</string>
+    <string name="toast_identifier_valid">Correo validado. Continuando&#8230;</string>
+    <string name="toast_identifier_invalid">Identificador inválido. Por favor intente de nuevo.</string>
+
+    <string name="action_sign_in">Iniciar Sesión</string>
+    <string name="action_next_arrow">Siguiente &#8250;</string>
+    <string name="action_done">Listo</string>
+
+    <string name="numbered_list_app">#%1$d: %2$s</string>
+
+    <string name="action_refresh_apps">Actualizar</string>
+    <string name="label_app_used_today">%1$s</string>
+    <string name="label_app_not_used_today">No se observó uso.</string>
+
+    <string name="label_app_usage_remaining">Tiempo Restante: %1$s</string>
+    <string name="label_app_no_usage_resriction">Sin restricciones de uso.</string>
+    <string name="label_app_usage_remaining_none">Límite agotado hasta mañana.</string>
+    <string name="toast_blocking_app">Tiempo de uso de %1$s agotado. Bloqueando hasta mañana&#8230;</string>
+
+    <string name="message_limit_reached_with_snooze">Ha alcanzado su límite de %1$d minutos. Puede continuar usándolo en %2$d minutos si pospone el límite de la aplicación.\n\nPuede modificar sus límites de aplicaciones en Phone Dashboard, efectivo a partir de mañana.</string>
+    <string name="message_limit_reached_with_snooze_single">Ha alcanzado su límite de 1 minuto. Puede continuar usándolo en %1$d minutos si pospone el límite de la aplicación.\n\nPuede modificar sus límites de aplicaciones en Phone Dashboard, efectivo a partir de mañana.</string>
+    <string name="message_limit_reached">Ha alcanzado su límite de %1$d minutos. No puede usar esta aplicación hasta mañana.\n\nPuede modificar sus límites de aplicaciones en Phone Dashboard, efectivo a partir de mañana.</string>
+    <string name="message_limit_reached_single">Ha alcanzado su límite de 1 minuto. No puede usar esta aplicación hasta mañana.\n\nPuede modificar sus límites de aplicaciones en Phone Dashboard, efectivo a partir de mañana.</string>
+
+    <string name="title_settings">Configuración</string>
+    <string name="label_app_budget_status">Límites de Uso de Aplicaciones</string>
+    <string name="label_app_budget_status_active">Activo</string>
+    <string name="label_app_budget_status_inactive">Inactivo</string>
+
+    <string name="settings_data_actions">Acciones de Datos</string>
+    <string name="settings_app_info">Información de la Aplicación</string>
+    <string name="placeholder_app_version">(Versión de la App Aquí)</string>
+    <string name="label_app_version">Versión de la Aplicación</string>
+
+    <string name="toast_uploading_data">Subiendo datos al servidor de Phone Dashboard&#8230;</string>
+    <string name="action_transmit_data_pending">%1$d Transmisión(es) Pendiente(s)</string>
+
+    <string name="action_settings">Configuración</string>
+    <string name="action_budget">Revisar Límites</string>
+
+    <string name="settings_acknowledgements">Agradecimientos</string>
+
+    <string name="title_budget">%1$d de %2$d minutos asignados</string>
+    <string name="subtitle_budget">Límites de Uso de Aplicaciones</string>
+    <string name="placeholder_app_budget_status">(Estado del Límite)</string>
+    <string name="action_save_budget">Guardar</string>
+
+    <string name="budget_unlimited">Sin restricciones de uso</string>
+    <string name="budget_exempt">Exento de restricciones de uso</string>
+    <string name="budget_duration">Límite diario de uso: %1$d minutos</string>
+    <string name="budget_duration_tomorrow">Efectivo mañana: %1$d minutos</string>
+    <string name="budget_duration_tomorrow_none">Efectivo mañana: Sin límites de uso</string>
+
+    <string name="action_set_limit">Establecer Límite</string>
+    <string name="action_remove_limit">Eliminar Límite</string>
+    <string name="message_select_limit">Seleccione el límite diario de uso (en minutos):</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="title_existing_budget">Límites de Uso Ya Establecidos</string>
+    <string name="message_existing_budget">Puede modificar sus límites de aplicaciones mañana.</string>
+    <string name="action_close">Cerrar</string>
+
+    <string name="title_about_app">Acerca de Phone Dashboard</string>
+    <string name="title_app_usage_permissions">Permiso de Uso de Aplicaciones</string>
+    <string name="title_setup_budget">Establecer Límites de Uso</string>
+    <string name="title_notification_permissions">Habilitar Notificaciones</string>
+
+    <string name="title_limits_initial">Establecer Límites Inmediatos</string>
+
+    <string name="title_initial_limit_setup">Establecer Límites de Aplicaciones</string>
+    <string name="message_initial_limit_setup">Los límites que elija en esta pantalla se activarán mañana.\n\nCuando modifique sus límites de aplicaciones en el futuro, esos límites se activarán el SIGUIENTE día calendario.</string>
+
+    <string name="message_app_exempt">Esta aplicación está exenta de límites de uso.</string>
+    <string name="subtitle_app_limits">Nuevos límites efectivos mañana</string>
+
+    <string name="title_onboarding_conclusion">Notas Finales</string>
+    <string name="title_app_limits">Límites de Uso de Aplicaciones</string>
+
+    <string name="title_limits_updated">Límites Actualizados</string>
+    <string name="message_limits_updated">Sus nuevos límites de aplicaciones entrarán en vigor mañana.</string>
+
+    <string name="label_app_receives_subsidy">Recibe Subsidio para la Fase Actual</string>
+    <string name="label_app_blocker_type">Tipo de Límite de Aplicación</string>
+    <string name="label_app_snooze_delay">Demora de Posposición</string>
+    <string name="action_refresh_study_configuration">Actualizar Configuración del Estudio</string>
+
+    <string name="value_yes">Sí</string>
+    <string name="value_no">No</string>
+
+    <string name="blocker_type_none">Sin Límites de Aplicación</string>
+    <string name="blocker_type_free_snooze">Posposición Gratuita</string>
+    <string name="blocker_type_costly_snooze">Posposición con Costo</string>
+    <string name="blocker_type_no_snooze">Sin Posposición</string>
+    <string name="label_snooze_delay_minutes">%1$d Minutos</string>
+
+    <string name="toast_config_update_failed">No se pudo actualizar la configuración. Por favor verifique su conexión de red&#8230;</string>
+    <string name="toast_config_update_succeeded">Configuración actualizada exitosamente.</string>
+
+    <string name="hint_limit_minutes">Límite de Uso (Minutos)</string>
+
+    <string name="action_snooze_limit">Posponer Límite</string>
+
+    <string name="message_app_snooze">Ingrese los minutos adicionales que desea poder usar %1$s:</string>
+    <string name="action_snooze_app">Posponer Límite</string>
+    <string name="hint_snooze_minutes">Uso Adicional (Minutos)</string>
+    <string name="toast_app_snoozed">Los límites de uso de la aplicación se levantarán temporalmente. Puede continuar usando la aplicación en breve.</string>
+
+    <string name="message_limit_approaching">Su límite diario para esta aplicación expirará en menos de %1$d minutos de uso adicional hoy.</string>
+
+    <string name="title_opt_out">¿Desactivar Bloqueo?</string>
+    <string name="message_opt_out">¿Está seguro de que desea desactivar los Límites de Uso de Aplicaciones?\n\nEsto elimina permanentemente sus límites actuales y no podrá imponer ningún límite futuro hasta la actualización de configuración en la próxima encuesta.</string>
+    <string name="action_opt_out">Sí, Desactivar</string>
+
+    <string name="label_app_treatment_status">Estado del Estudio</string>
+    <string name="label_app_period_start">Inicio de la Fase Actual</string>
+    <string name="period_start_unknown">Inicio de Fase Desconocido</string>
+
+    <string name="title_invalid_email">Correo Electrónico Inválido</string>
+    <string name="message_invalid_email">La dirección de correo electrónico proporcionada no es válida. Por favor ingrese una dirección de correo válida.</string>
+
+    <string name="title_email_validated">Inscripción Exitosa</string>
+    <string name="message_email_validated">Se ha inscrito exitosamente en el estudio sobre el Uso del Teléfono. Su código de aplicación es\n\n%1$s\n\nRecibirá un correo electrónico con este código. Por favor registre este código de 8 dígitos en la encuesta para confirmar su identidad.</string>
+
+    <string name="label_app_code">Código de Aplicación</string>
+
+    <string name="tab_today">Hoy</string>
+    <string name="tab_week">Semana</string>
+    <string name="tab_treatment">Esta Fase</string>
+
+    <string name="toast_app_code_copied">Código de Aplicación "%1$s" copiado al portapapeles&#8230;</string>
+    <string name="settings_user_info">Configuración de Phone Dashboard</string>
+    <string name="title_settings_acknowledgements">Agradecimientos</string>
+
+    <string name="settings_irb_number">IRB-FY2020-3618</string>
+    <string name="settings_irb_summary">Número IRB de Harvard</string>
+
+    <string name="settings_more_information">Detalles de la Aplicación</string>
+
+    <string name="action_refresh_configuration">Actualizar Configuración</string>
+    <string name="toast_refreshing_configuration">Actualizando configuración desde el servidor&#8230;</string>
+
+    <string name="title_limits_initial_updated">¿Establecer Límites Iniciales?</string>
+    <string name="message_limits_initial_updated_single">Ha establecido el límite inicial para una aplicación.\n\nEstos límites se aplicarán mañana.</string>
+    <string name="message_limits_initial_updated">Ha establecido los límites iniciales para %1$d aplicaciones.\n\nEstos límites se aplicarán mañana.</string>
+
+    <string name="toast_opt_out_failed">No se pudo desactivar en este momento. Por favor verifique que tiene una conexión de red activa e intente de nuevo&#8230;</string>
+    <string name="toast_opt_out_successful">Se ha desactivado exitosamente de esta fase del experimento.</string>
+    <string name="toast_opt_out_failed_try_again">No se pudo desactivar en este momento. Por favor intente de nuevo en unos momentos.</string>
+
+    <string name="label_app_treatment_status_active">Desactivar Límites de Uso de Aplicaciones</string>
+    <string name="label_app_treatment_status_inactive">Desactivado de Límites de Uso de Aplicaciones</string>
+
+    <string name="dialog_message_snooze_free">Puede continuar usando %1$s después de %2$s.\n\n¿Cuántos minutos adicionales desea?</string>
+    <string name="dialog_message_snooze_costly">Puede continuar usando %1$s después de %2$s por $%3$.2f.\n\n¿Cuántos minutos adicionales desea?</string>
+    <string name="dialog_message_snooze_active">Puede continuar usando %1$s después de %2$s.</string>
+
+    <string name="message_limit_approaching_single">Su límite diario para esta aplicación expirará en menos de un minuto de uso adicional.</string>
+
+    <string name="title_app_limits_required">Establecer Límites de Aplicaciones</string>
+    <string name="message_app_limits_required">En esta parte del estudio, Phone Dashboard aplicará límites a su uso diario de aplicaciones.\n\nPor favor pause y regrese a su encuesta.\n\nToque Continuar para establecer sus límites de uso de aplicaciones.</string>
+
+    <string name="title_set_snooze_cost">Especificar Costo de Posposición</string>
+    <string name="dialog_message_app_snooze_cost">Recibirá recompensas adicionales de $%1$.2f menos los costos de posposición. ¿Qué precio desea establecer por posposición?</string>
+    <string name="dialog_message_app_snooze_cost_tip">Puede preferir establecer un precio más alto si desea usar esta función para ayudarle a cumplir sus metas.</string>
+    <string name="hint_snooze_cost">Costo de Posposición</string>
+    <string name="action_save_snooze_cost">Guardar Costo de Posposición</string>
+    <string name="format_dollars">$%1$.2f</string>
+
+    <string name="toast_budget_limit">Por favor ingrese un costo entre $%1$.2f y $%2$.2f&#8230;</string>
+
+    <string name="label_app_usage_limit_function">Función de Límite de Uso de Aplicaciones</string>
+    <string name="message_select_limit_zero">Establezca el límite en "0" para deshabilitar el uso de la aplicación.</string>
+
+    <string name="action_upload_data">Subir Datos</string>
+    <string name="summary_upload_data">Enviar datos a la nube de Phone Dashboard.</string>
+
+    <string name="subtitle_today">Uso Total Hoy</string>
+    <string name="subtitle_daily_average">Uso Diario Prom.: %1$s a %2$s</string>
+
+    <string name="title_average_daily_usage">Uso Diario Promedio:\n%1$s a %2$s</string>
+    <string name="title_average_daily_usage_single">Uso Diario: %1$s</string>
+    <string name="title_average_daily_usage_today">Uso de Hoy</string>
+
+    <string name="subtitle_remaining_snooze_budget">Presupuesto de Posposición: $%1$.2f</string>
+    <string name="value_app_remaining_budget">$%1$.2f</string>
+    <string name="label_app_remaining_budget">Presupuesto de Posposición Restante</string>
+
+    <string name="label_home_screen">Pantalla de Inicio</string>
+
+    <string name="message_database_maintenance">Phone Dashboard está realizando mantenimiento de la base de datos&#8230;</string>
+
+    <string name="title_window_management">Permitir Gestión de Ventanas</string>
+    <string name="toast_cannot_parse_snooze">No se pudo procesar el valor proporcionado. Por favor intente de nuevo&#8230;</string>
+
+    <string name="apps_web_browsers">Navegadores</string>
+    <string name="apps_youtube">YouTube</string>
+    <string name="apps_facebook">Facebook</string>
+    <string name="apps_instagram">Instagram</string>
+    <string name="apps_snapchat">Snapchat</string>
+    <string name="apps_twitter">Twitter</string>
+    <string name="apps_whatsapp">WhatsApp</string>
+
+    <string name="note_title_attention_needed">¡Atención Necesaria!</string>
+    <string name="note_message_attention_needed">Toque para solucionar el problema de Phone Dashboard.</string>
+
+    <string name="foreground_channel_id">Phone Dashboard</string>
+
+    <string name="action_skip">Omitir y Salir</string>
+
+    <string name="dialog_title_confirm_dirty_save">¿Guardar Límites?</string>
+    <string name="dialog_message_confirm_dirty_save">Tiene cambios sin guardar en sus límites.\n\n¿Desea guardarlos antes de salir de esta pantalla?</string>
+
+    <string name="title_set_snooze_delay">Establecer Demora de Posposición</string>
+
+    <string-array name="snooze_delay_options">
+        <item>Posponer Después de 1 Minuto</item>
+        <item>Posponer Después de 2 Minutos</item>
+        <item>Posponer Después de 5 Minutos</item>
+        <item>Posponer Después de 10 Minutos</item>
+        <item>Posponer Después de 20 Minutos</item>
+        <item>Posponer Inmediatamente</item>
+        <item>Deshabilitar Posposiciones</item>
+    </string-array>
+
+    <string name="label_app_current_snooze_delay">Demora de Posposición Actual</string>
+    <string name="label_app_change_snooze_delay">Cambiar Demora de Posposición</string>
+    <string name="label_app_change_snooze_delay_summary">Efectivo Mañana: %1$d Minutos</string>
+    <string name="label_app_change_snooze_delay_summary_one_minute">Efectivo Mañana: 1 Minuto</string>
+    <string name="label_app_change_snooze_delay_summary_none">Efectivo Mañana: Ninguno</string>
+    <string name="label_app_change_snooze_delay_summary_disabled">Efectivo Mañana: Posposición Deshabilitada</string>
+    <string name="title_change_snooze_delay">Cambiar Demora de Posposición</string>
+
+    <string name="label_snooze_delay_none">Posposición Deshabilitada</string>
+    <string name="label_snooze_delay_immediate">Posponer Inmediatamente</string>
+    <string name="label_snooze_delay_one_minute">1 Minuto</string>
+
+    <string name="message_change_snooze_delay_old">La Demora de Posposición especifica el tiempo que debe esperar para que las posposiciones sean efectivas cuando alcanza el límite diario de tiempo de pantalla para aplicaciones. Por favor ingrese la Demora de Posposición que desea en minutos, efectiva mañana. Si desea posponer instantáneamente después de alcanzar un límite, elija "Ninguno". Si no desea posponer nunca sus límites, elija "Sin Posposición".</string>
+    <string name="message_change_snooze_delay">La Demora de Posposición especifica el tiempo que debe esperar para que las posposiciones sean efectivas cuando alcanza el límite diario de tiempo de pantalla para aplicaciones. Los cambios son efectivos mañana.</string>
+    <string name="hint_snooze_delay_minutes">Demora de Posposición (Minutos)</string>
+    <string name="action_change_delay">Cambiar Demora de Posposición</string>
+    <string name="action_no_snooze">Deshabilitar Posposiciones</string>
+    <string name="action_no_snooze_delay">Sin Demora de Posposición</string>
+
+    <string name="toast_confirm_snooze">Su Demora de Posposición de %1$s minutos será efectiva mañana.</string>
+    <string name="toast_confirm_snooze_none">Sin posposición será efectivo mañana.</string>
+    <string name="toast_confirm_snooze_disabled">Las posposiciones serán deshabilitadas completamente efectivo mañana.</string>
+
+    <string name="action_dont_show_again">No Mostrar de Nuevo</string>
+    <string name="action_continue">Continuar</string>
+</resources>

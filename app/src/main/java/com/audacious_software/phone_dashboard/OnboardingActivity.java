@@ -15,6 +15,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
+
+import java.util.Locale;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -145,7 +147,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
         WebView webView = this.findViewById(R.id.step_webview);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("file:///android_asset/html/onboarding_window_management.html");
+        webView.loadUrl(this.getLocalizedHtmlPath("onboarding_window_management.html"));
 
         this.showPage(R.id.step_webview, R.string.action_next_arrow, new View.OnClickListener() {
             @Override
@@ -167,6 +169,18 @@ public class OnboardingActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private String getLocalizedHtmlPath(String htmlFileName) {
+        String language = Locale.getDefault().getLanguage();
+
+        // Check if Spanish locale - load Spanish HTML files
+        if ("es".equals(language)) {
+            return "file:///android_asset/html/es/" + htmlFileName;
+        }
+
+        // Default to English
+        return "file:///android_asset/html/" + htmlFileName;
     }
 
     private static boolean shownExplanation(Context context) {
@@ -262,7 +276,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
         WebView webView = this.findViewById(R.id.step_webview);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("file:///android_asset/html/onboarding_app_explain.html");
+        webView.loadUrl(this.getLocalizedHtmlPath("onboarding_app_explain.html"));
 
         this.showPage(R.id.step_webview, R.string.action_next_arrow, new View.OnClickListener() {
             @Override
@@ -285,7 +299,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
         WebView webView = this.findViewById(R.id.step_webview);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("file:///android_asset/html/onboarding_app_usage.html");
+        webView.loadUrl(this.getLocalizedHtmlPath("onboarding_app_usage.html"));
 
         this.showPage(R.id.step_webview, R.string.action_next_arrow, new View.OnClickListener() {
             @Override
@@ -315,7 +329,7 @@ public class OnboardingActivity extends AppCompatActivity {
         } else {
             WebView webView = this.findViewById(R.id.step_webview);
             webView.getSettings().setJavaScriptEnabled(true);
-            webView.loadUrl("file:///android_asset/html/onboarding_app_notifications.html");
+            webView.loadUrl(this.getLocalizedHtmlPath("onboarding_app_notifications.html"));
 
             this.showPage(R.id.step_webview, R.string.action_next_arrow, new View.OnClickListener() {
                 @Override
@@ -336,7 +350,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
         WebView webView = this.findViewById(R.id.step_webview);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("file:///android_asset/html/onboarding_app_limits.html");
+        webView.loadUrl(this.getLocalizedHtmlPath("onboarding_app_limits.html"));
 
         this.showPage(R.id.step_webview, R.string.action_next_arrow, new View.OnClickListener() {
             @Override
@@ -362,7 +376,7 @@ public class OnboardingActivity extends AppCompatActivity {
 
         WebView webView = this.findViewById(R.id.step_webview);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("file:///android_asset/html/onboarding_app_conclusion.html");
+        webView.loadUrl(this.getLocalizedHtmlPath("onboarding_app_conclusion.html"));
 
         this.showPage(R.id.step_webview, R.string.action_done, new View.OnClickListener() {
             @Override
