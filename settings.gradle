@@ -16,7 +16,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Phone Dashboard"
+rootProject.name = "Mi Ritmo Digital"
 
 include ':app'
 

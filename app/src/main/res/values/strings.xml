@@ -1,12 +1,12 @@
 <resources>
-    <!-- Configure the values below to point to your Phone Dashboard enrollment server. -->
+    <!-- Configure the values below to point to your Mi Ritmo Digital enrollment server. -->
 
     <!-- PRODUCTION SERVER: DigitalOcean droplet -->
     <string name="url_phone_dashboard_configuration">http://143.198.99.126/data/app-config.json</string>
     <string name="url_phone_study_configuration">http://143.198.99.126/study/config.json</string>
     <string name="url_phone_enroll">http://143.198.99.126/study/enroll-email.json</string>
 
-    <string name="app_name">Phone Dashboard</string>
+    <string name="app_name">Mi Ritmo Digital</string>
 
     <string name="action_data_stream">Data Stream</string>
     <string name="action_transmit_data">Transmit Data</string>
@@ -16,13 +16,13 @@
     <string name="url_opt_in">http://143.198.99.126/study/activate/%1$s.json</string>
     <string name="url_latest_version">http://143.198.99.126/study/latest-version.json</string>
 
-    <string name="onboarding_sign_in">Welcome to Phone Dashboard. This app has been developed for the Harvard Smartphone Study.\n\nTo continue, please enter your e-mail address below:</string>
+    <string name="onboarding_sign_in">Welcome to Mi Ritmo Digital. This app has been developed for the Harvard Smartphone Study.\n\nTo continue, please enter your e-mail address below:</string>
     <string name="hint_onboarding_email">E-Mail Address</string>
 
     <string name="message_no_user_budgets">The selected configuration does not permit app budgets to be configured.\n\nTap the "Next" button above to continue.</string>
 
     <string name="title_onboarding">Welcome!</string>
-    <string name="subtitle_onboarding">Phone Dashboard Setup</string>
+    <string name="subtitle_onboarding">Mi Ritmo Digital Setup</string>
     <string name="toast_identifier_valid">E-mail validated. Continuing&#8230;</string>
     <string name="toast_identifier_invalid">Invalid identifier. Please try again.</string>
 
@@ -41,10 +41,10 @@
     <string name="label_app_usage_remaining_none">Budget exhausted until tomorrow.</string>
     <string name="toast_blocking_app">Time budget for %1$s exhausted. Blocking until tomorrow&#8230;</string>
 
-    <string name="message_limit_reached_with_snooze">You have reached your limit of %1$d minutes. You may resume using it in %2$d minutes if you snooze the app limit.\n\nYou can revise your app limits in Phone Dashboard, effective tomorrow.</string>
-    <string name="message_limit_reached_with_snooze_single">You have reached your limit of 1 minute. You may resume using it in %1$d minutes if you snooze the app limit.\n\nYou can revise your app limits in Phone Dashboard, effective tomorrow.</string>
-    <string name="message_limit_reached">You have reached your limit of %1$d minutes. You cannot use this app until tomorrow.\n\nYou can revise your app limits in Phone Dashboard, effective tomorrow.</string>
-    <string name="message_limit_reached_single">You have reached your limit of 1 minute. You cannot use this app until tomorrow.\n\nYou can revise your app limits in Phone Dashboard, effective tomorrow.</string>
+    <string name="message_limit_reached_with_snooze">You have reached your limit of %1$d minutes. You may resume using it in %2$d minutes if you snooze the app limit.\n\nYou can revise your app limits in Mi Ritmo Digital, effective tomorrow.</string>
+    <string name="message_limit_reached_with_snooze_single">You have reached your limit of 1 minute. You may resume using it in %1$d minutes if you snooze the app limit.\n\nYou can revise your app limits in Mi Ritmo Digital, effective tomorrow.</string>
+    <string name="message_limit_reached">You have reached your limit of %1$d minutes. You cannot use this app until tomorrow.\n\nYou can revise your app limits in Mi Ritmo Digital, effective tomorrow.</string>
+    <string name="message_limit_reached_single">You have reached your limit of 1 minute. You cannot use this app until tomorrow.\n\nYou can revise your app limits in Mi Ritmo Digital, effective tomorrow.</string>
 
     <string name="title_settings">Settings</string>
     <string name="label_app_budget_status">App Usage Limits</string>
@@ -56,7 +56,7 @@
     <string name="placeholder_app_version">(App Version Here)</string>
     <string name="label_app_version">Application Version</string>
 
-    <string name="toast_uploading_data">Uploading data to the Phone Dashboard server&#8230;</string>
+    <string name="toast_uploading_data">Uploading data to the Mi Ritmo Digital server&#8230;</string>
     <string name="action_transmit_data_pending">%1$d Pending Transmission(s)</string>
 
     <string name="action_settings">Settings</string>
@@ -110,7 +110,7 @@
     <string name="message_existing_budget">You can revise your app limits again tomorrow.</string>
     <string name="action_close">Close</string>
 
-    <string name="title_about_app">About Phone Dashboard</string>
+    <string name="title_about_app">About Mi Ritmo Digital</string>
     <string name="title_app_usage_permissions">App Usage Permission</string>
     <string name="title_setup_budget">Set App Usage Limits</string>
     <string name="title_notification_permissions">Enable Notifications</string>
@@ -179,7 +179,7 @@
     <string name="tab_treatment">This Phase</string>
 
     <string name="toast_app_code_copied">App Code "%1$s" copied to clipboard&#8230;</string>
-    <string name="settings_user_info">Phone Dashboard Settings</string>
+    <string name="settings_user_info">Mi Ritmo Digital Settings</string>
     <string name="title_settings_acknowledgements">Acknowledgements</string>
 
     <string name="settings_irb_number">IRB-FY2020-3618</string>
@@ -208,7 +208,7 @@
     <string name="message_limit_approaching_single">Your daily limit for this app will expire in less than one minute of additional usage.</string>
 
     <string name="title_app_limits_required">Set App Limits</string>
-    <string name="message_app_limits_required">In this part of the study, Phone Dashboard will enforce limits on your daily app usage.\n\nPlease pause and return to your survey.\n\nTap Continue to set your app usage limits.</string>
+    <string name="message_app_limits_required">In this part of the study, Mi Ritmo Digital will enforce limits on your daily app usage.\n\nPlease pause and return to your survey.\n\nTap Continue to set your app usage limits.</string>
 
     <string name="title_set_snooze_cost">Specify Cost of Snooze</string>
     <string name="dialog_message_app_snooze_cost">You will receive extra rewards of $%1$.2f minus snooze costs. What price would you like to set per snooze?</string>
@@ -223,7 +223,7 @@
     <string name="message_select_limit_zero">Set the limit to "0" to disable usage of the app.</string>
 
     <string name="action_upload_data">Upload Data</string>
-    <string name="summary_upload_data">Send data to Phone Dashboard cloud.</string>
+    <string name="summary_upload_data">Send data to Mi Ritmo Digital cloud.</string>
 
     <string name="subtitle_today">Total Use Today</string>
     <string name="subtitle_daily_average">Avg. Daily Use: %1$s to %2$s</string>
@@ -238,7 +238,7 @@
 
     <string name="label_home_screen">Home Screen</string>
 
-    <string name="message_database_maintenance">Phone Dashboard is performing database maintenance&#8230;</string>
+    <string name="message_database_maintenance">Mi Ritmo Digital is performing database maintenance&#8230;</string>
 
     <string name="title_window_management">Allow Window Management</string>
     <string name="toast_cannot_parse_snooze">Could not parse provided value. Please try again&#8230;</string>
@@ -252,9 +252,9 @@
     <string name="apps_whatsapp">WhatsApp</string>
 
     <string name="note_title_attention_needed">Attention Needed!</string>
-    <string name="note_message_attention_needed">Tap to fix Phone Dashboard issue.</string>
+    <string name="note_message_attention_needed">Tap to fix Mi Ritmo Digital issue.</string>
 
-    <string name="foreground_channel_id">Phone Dashboard</string>
+    <string name="foreground_channel_id">Mi Ritmo Digital</string>
 
     <string name="action_skip">Skip and Exit</string>
 

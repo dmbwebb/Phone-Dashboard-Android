@@ -1,20 +1,20 @@
 <resources>
-    <!-- Spanish (Latin American) translations for Phone Dashboard -->
+    <!-- Spanish (Latin American) translations for Mi Ritmo Digital -->
     <!-- URLs remain unchanged - they point to the same server -->
 
     <!-- App name stays in English as requested -->
-    <string name="app_name">Phone Dashboard</string>
+    <string name="app_name">Mi Ritmo Digital</string>
 
     <string name="action_data_stream">Flujo de Datos</string>
     <string name="action_transmit_data">Transmitir Datos</string>
 
-    <string name="onboarding_sign_in">Bienvenido a Phone Dashboard. Esta aplicación ha sido desarrollada para el Estudio Harvard sobre el Uso del Teléfono.\n\nPara continuar, ingrese su dirección de correo electrónico:</string>
+    <string name="onboarding_sign_in">Bienvenido a Mi Ritmo Digital. Esta aplicación ha sido desarrollada para el Estudio Harvard sobre el Uso del Teléfono.\n\nPara continuar, ingrese su dirección de correo electrónico:</string>
     <string name="hint_onboarding_email">Correo Electrónico</string>
 
     <string name="message_no_user_budgets">La configuración seleccionada no permite establecer límites de uso de aplicaciones.\n\nToque el botón "Siguiente" arriba para continuar.</string>
 
     <string name="title_onboarding">¡Bienvenido!</string>
-    <string name="subtitle_onboarding">Configuración de Phone Dashboard</string>
+    <string name="subtitle_onboarding">Configuración de Mi Ritmo Digital</string>
     <string name="toast_identifier_valid">Correo validado. Continuando&#8230;</string>
     <string name="toast_identifier_invalid">Identificador inválido. Por favor intente de nuevo.</string>
 
@@ -33,10 +33,10 @@
     <string name="label_app_usage_remaining_none">Límite agotado hasta mañana.</string>
     <string name="toast_blocking_app">Tiempo de uso de %1$s agotado. Bloqueando hasta mañana&#8230;</string>
 
-    <string name="message_limit_reached_with_snooze">Ha alcanzado su límite de %1$d minutos. Puede continuar usándolo en %2$d minutos si pospone el límite de la aplicación.\n\nPuede modificar sus límites de aplicaciones en Phone Dashboard, efectivo a partir de mañana.</string>
-    <string name="message_limit_reached_with_snooze_single">Ha alcanzado su límite de 1 minuto. Puede continuar usándolo en %1$d minutos si pospone el límite de la aplicación.\n\nPuede modificar sus límites de aplicaciones en Phone Dashboard, efectivo a partir de mañana.</string>
-    <string name="message_limit_reached">Ha alcanzado su límite de %1$d minutos. No puede usar esta aplicación hasta mañana.\n\nPuede modificar sus límites de aplicaciones en Phone Dashboard, efectivo a partir de mañana.</string>
-    <string name="message_limit_reached_single">Ha alcanzado su límite de 1 minuto. No puede usar esta aplicación hasta mañana.\n\nPuede modificar sus límites de aplicaciones en Phone Dashboard, efectivo a partir de mañana.</string>
+    <string name="message_limit_reached_with_snooze">Ha alcanzado su límite de %1$d minutos. Puede continuar usándolo en %2$d minutos si pospone el límite de la aplicación.\n\nPuede modificar sus límites de aplicaciones en Mi Ritmo Digital, efectivo a partir de mañana.</string>
+    <string name="message_limit_reached_with_snooze_single">Ha alcanzado su límite de 1 minuto. Puede continuar usándolo en %1$d minutos si pospone el límite de la aplicación.\n\nPuede modificar sus límites de aplicaciones en Mi Ritmo Digital, efectivo a partir de mañana.</string>
+    <string name="message_limit_reached">Ha alcanzado su límite de %1$d minutos. No puede usar esta aplicación hasta mañana.\n\nPuede modificar sus límites de aplicaciones en Mi Ritmo Digital, efectivo a partir de mañana.</string>
+    <string name="message_limit_reached_single">Ha alcanzado su límite de 1 minuto. No puede usar esta aplicación hasta mañana.\n\nPuede modificar sus límites de aplicaciones en Mi Ritmo Digital, efectivo a partir de mañana.</string>
 
     <string name="title_settings">Configuración</string>
     <string name="label_app_budget_status">Límites de Uso de Aplicaciones</string>
@@ -48,7 +48,7 @@
     <string name="placeholder_app_version">(Versión de la App Aquí)</string>
     <string name="label_app_version">Versión de la Aplicación</string>
 
-    <string name="toast_uploading_data">Subiendo datos al servidor de Phone Dashboard&#8230;</string>
+    <string name="toast_uploading_data">Subiendo datos al servidor de Mi Ritmo Digital&#8230;</string>
     <string name="action_transmit_data_pending">%1$d Transmisión(es) Pendiente(s)</string>
 
     <string name="action_settings">Configuración</string>
@@ -75,7 +75,7 @@
     <string name="message_existing_budget">Puede modificar sus límites de aplicaciones mañana.</string>
     <string name="action_close">Cerrar</string>
 
-    <string name="title_about_app">Acerca de Phone Dashboard</string>
+    <string name="title_about_app">Acerca de Mi Ritmo Digital</string>
     <string name="title_app_usage_permissions">Permiso de Uso de Aplicaciones</string>
     <string name="title_setup_budget">Establecer Límites de Uso</string>
     <string name="title_notification_permissions">Habilitar Notificaciones</string>
@@ -143,7 +143,7 @@
     <string name="tab_treatment">Esta Fase</string>
 
     <string name="toast_app_code_copied">Código de Aplicación "%1$s" copiado al portapapeles&#8230;</string>
-    <string name="settings_user_info">Configuración de Phone Dashboard</string>
+    <string name="settings_user_info">Configuración de Mi Ritmo Digital</string>
     <string name="title_settings_acknowledgements">Agradecimientos</string>
 
     <string name="settings_irb_number">IRB-FY2020-3618</string>
@@ -172,7 +172,7 @@
     <string name="message_limit_approaching_single">Su límite diario para esta aplicación expirará en menos de un minuto de uso adicional.</string>
 
     <string name="title_app_limits_required">Establecer Límites de Aplicaciones</string>
-    <string name="message_app_limits_required">En esta parte del estudio, Phone Dashboard aplicará límites a su uso diario de aplicaciones.\n\nPor favor pause y regrese a su encuesta.\n\nToque Continuar para establecer sus límites de uso de aplicaciones.</string>
+    <string name="message_app_limits_required">En esta parte del estudio, Mi Ritmo Digital aplicará límites a su uso diario de aplicaciones.\n\nPor favor pause y regrese a su encuesta.\n\nToque Continuar para establecer sus límites de uso de aplicaciones.</string>
 
     <string name="title_set_snooze_cost">Especificar Costo de Posposición</string>
     <string name="dialog_message_app_snooze_cost">Recibirá recompensas adicionales de $%1$.2f menos los costos de posposición. ¿Qué precio desea establecer por posposición?</string>
@@ -187,7 +187,7 @@
     <string name="message_select_limit_zero">Establezca el límite en "0" para deshabilitar el uso de la aplicación.</string>
 
     <string name="action_upload_data">Subir Datos</string>
-    <string name="summary_upload_data">Enviar datos a la nube de Phone Dashboard.</string>
+    <string name="summary_upload_data">Enviar datos a la nube de Mi Ritmo Digital.</string>
 
     <string name="subtitle_today">Uso Total Hoy</string>
     <string name="subtitle_daily_average">Uso Diario Prom.: %1$s a %2$s</string>
@@ -202,7 +202,7 @@
 
     <string name="label_home_screen">Pantalla de Inicio</string>
 
-    <string name="message_database_maintenance">Phone Dashboard está realizando mantenimiento de la base de datos&#8230;</string>
+    <string name="message_database_maintenance">Mi Ritmo Digital está realizando mantenimiento de la base de datos&#8230;</string>
 
     <string name="title_window_management">Permitir Gestión de Ventanas</string>
     <string name="toast_cannot_parse_snooze">No se pudo procesar el valor proporcionado. Por favor intente de nuevo&#8230;</string>
@@ -216,9 +216,9 @@
     <string name="apps_whatsapp">WhatsApp</string>
 
     <string name="note_title_attention_needed">¡Atención Necesaria!</string>
-    <string name="note_message_attention_needed">Toque para solucionar el problema de Phone Dashboard.</string>
+    <string name="note_message_attention_needed">Toque para solucionar el problema de Mi Ritmo Digital.</string>
 
-    <string name="foreground_channel_id">Phone Dashboard</string>
+    <string name="foreground_channel_id">Mi Ritmo Digital</string>
 
     <string name="action_skip">Omitir y Salir</string>
 
