@@ -30,10 +30,8 @@ import com.audacious_software.passive_data_kit.generators.device.ForegroundAppli
 import com.github.anrwatchdog.ANRError;
 import com.github.anrwatchdog.ANRWatchDog;
 import com.google.android.material.textfield.TextInputEditText;
-// import com.google.firebase.FirebaseApp; // Disabled - no valid Firebase config
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -119,17 +117,18 @@ public class AppApplication extends Application implements PassiveDataKitApplica
 
         final AppApplication me = this;
 
-        // FirebaseApp.initializeApp(me); // Disabled - no valid Firebase config
+        FirebaseApp.initializeApp(me);
 
         HandlerThread thread = new HandlerThread("app-background-tasks");
         thread.start();
 
-        AppCenter.start(this, this.getString(R.string.key_app_center), Analytics.class, Crashes.class);
+        FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
+        crashlytics.setCrashlyticsCollectionEnabled(true);
 
         String identifier = this.getIdentifier();
 
         if (identifier != null) {
-            AppCenter.setUserId(identifier);
+            crashlytics.setUserId(identifier);
         }
 
         new ANRWatchDog().setIgnoreDebugger(true).setANRListener(new ANRWatchDog.ANRListener() {
@@ -154,7 +153,7 @@ public class AppApplication extends Application implements PassiveDataKitApplica
 
         Schedule.getInstance(this).setUserId(identifier);
 
-        AppCenter.setUserId(identifier);
+        FirebaseCrashlytics.getInstance().setUserId(identifier);
     }
 
     public void enrollEmail(final String email, final Runnable success, final Runnable failure) {
@@ -190,6 +189,13 @@ public class AppApplication extends Application implements PassiveDataKitApplica
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                if (response.body() == null) {
+                    if (failure != null) {
+                        failure.run();
+                    }
+                    return;
+                }
+
                 String responseBody = response.body().string();
 
                 Log.e("PHONE-DASHBOARD", "ID FETCHED: " + responseBody);
@@ -286,6 +292,16 @@ public class AppApplication extends Application implements PassiveDataKitApplica
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                if (response.body() == null) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(me, R.string.toast_opt_out_failed_try_again, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    return;
+                }
+
                 String responseBody = response.body().string();
 
                 try {
@@ -453,6 +469,11 @@ public class AppApplication extends Application implements PassiveDataKitApplica
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
+                    if (response.body() == null) {
+                        Logger.getInstance(me).log("config_fetch_failed", new HashMap<>());
+                        return;
+                    }
+
                     String responseBody = response.body().string();
 
                     Handler handler = new Handler(Looper.getMainLooper());
@@ -1004,6 +1025,10 @@ public class AppApplication extends Application implements PassiveDataKitApplica
 
                 if (hour > AppApplication.LAST_APPEARANCE_OPPORTUNISTIC_HOUR_START && hour < AppApplication.LAST_APPEARANCE_OPPORTUNISTIC_HOUR_END) {
                     Intent intent = this.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+                    if (intent == null) {
+                        return;
+                    }
 
                     int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
 
