@@ -11,8 +11,8 @@ android {
         applicationId "com.smartphones.colombia.phonedashboard"
         minSdkVersion 24
         targetSdk 35
-        versionCode 89
-        versionName "89"
+        versionCode 90
+        versionName "90"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         manifestPlaceholders = [
                 appAuthRedirectScheme: "NOT-USED"

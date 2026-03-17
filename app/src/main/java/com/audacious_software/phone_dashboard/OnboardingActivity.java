@@ -97,10 +97,6 @@ public class OnboardingActivity extends AppCompatActivity {
             issues.add("missing-app-usage");
         }
 
-        if (OnboardingActivity.hasWindowPermission(app) == false) {
-            issues.add("missing-window-permissions");
-        }
-
         return issues;
     }
 
@@ -111,7 +107,6 @@ public class OnboardingActivity extends AppCompatActivity {
 
         boolean shownExplanation = OnboardingActivity.shownExplanation(this);
         boolean hasUsagePermission = ForegroundApplication.hasPermissions(this.mApp);
-        boolean hasWindowPermission = OnboardingActivity.hasWindowPermission(this);
         boolean hasNotificationPermission = NotificationEvents.areNotificationsEnabled(this);
         boolean areNotificationVisible = NotificationEvents.areNotificationsVisible(this);
 
@@ -125,8 +120,6 @@ public class OnboardingActivity extends AppCompatActivity {
             this.fetchUsagePermissions();
         } else if (!areNotificationVisible) {
             this.fetchNotificationPermissions();
-        } else if (!hasWindowPermission) {
-            this.fetchWindowPermissions();
         } else if (!shownConclusion) {
             this.showConclusion();
         } else {
