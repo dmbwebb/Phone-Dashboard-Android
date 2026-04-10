@@ -12,9 +12,12 @@
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" tools:node="remove" />
     <uses-permission android:name="android.permission.BLUETOOTH" tools:node="remove" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" tools:node="remove" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" tools:node="remove" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" tools:node="remove" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" tools:node="remove" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" tools:node="remove" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -57,5 +60,12 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+        <!-- Remove unused PDK wearable activities that require permissions we don't have -->
+        <activity android:name="com.audacious_software.passive_data_kit.activities.generators.MicrosoftBandAuthActivity"
+            tools:node="remove" />
+        <activity android:name="com.audacious_software.passive_data_kit.generators.wearables.Withings$OAuthResultHandlerActivity"
+            tools:node="remove" />
+        <activity android:name="com.audacious_software.passive_data_kit.generators.wearables.Fitbit$OAuthResultHandlerActivity"
+            tools:node="remove" />
     </application>
 </manifest>
