@@ -8,11 +8,11 @@ android {
     compileSdk 35
 
     defaultConfig {
-        applicationId "com.smartphones.colombia.phonedashboard"
+        applicationId "com.miritmodigital.app"
         minSdkVersion 24
         targetSdk 35
-        versionCode 92
-        versionName "92"
+        versionCode 94
+        versionName "94"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         manifestPlaceholders = [
                 appAuthRedirectScheme: "NOT-USED"

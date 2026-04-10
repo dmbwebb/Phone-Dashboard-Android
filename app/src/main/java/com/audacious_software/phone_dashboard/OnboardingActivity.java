@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -97,6 +99,13 @@ public class OnboardingActivity extends AppCompatActivity {
             issues.add("missing-app-usage");
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PowerManager pm = (PowerManager) app.getSystemService(Context.POWER_SERVICE);
+            if (!pm.isIgnoringBatteryOptimizations(app.getPackageName())) {
+                issues.add("missing-battery-optimization");
+            }
+        }
+
         return issues;
     }
 
@@ -112,6 +121,12 @@ public class OnboardingActivity extends AppCompatActivity {
 
         boolean shownConclusion = OnboardingActivity.shownConclusion(this);
 
+        boolean hasBatteryOptimization = true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            hasBatteryOptimization = pm.isIgnoringBatteryOptimizations(getPackageName());
+        }
+
         if (identifier == null) {
             this.showWelcome();
         } else if (!shownExplanation) {
@@ -120,6 +135,8 @@ public class OnboardingActivity extends AppCompatActivity {
             this.fetchUsagePermissions();
         } else if (!areNotificationVisible) {
             this.fetchNotificationPermissions();
+        } else if (!hasBatteryOptimization) {
+            this.requestBatteryOptimization();
         } else if (!shownConclusion) {
             this.showConclusion();
         } else {
@@ -333,6 +350,29 @@ public class OnboardingActivity extends AppCompatActivity {
         }
     }
 
+
+    @SuppressLint("BatteryLife")
+    private void requestBatteryOptimization() {
+        final OnboardingActivity me = this;
+
+        this.mToolbar.setTitle(R.string.title_battery_optimization);
+        this.mToolbar.setSubtitle(R.string.subtitle_onboarding);
+
+        WebView webView = this.findViewById(R.id.step_webview);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl(this.getLocalizedHtmlPath("onboarding_battery_optimization.html"));
+
+        this.showPage(R.id.step_webview, R.string.action_next_arrow, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                    intent.setData(Uri.parse("package:" + me.getPackageName()));
+                    me.startActivity(intent);
+                }
+            }
+        });
+    }
 
     @SuppressLint("SetJavaScriptEnabled")
     private void showBudget() {
