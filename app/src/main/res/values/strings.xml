@@ -2,9 +2,9 @@
     <!-- Configure the values below to point to your Mi Ritmo Digital enrollment server. -->
 
     <!-- PRODUCTION SERVER: DigitalOcean droplet -->
-    <string name="url_phone_dashboard_configuration">http://143.198.99.126/data/app-config.json</string>
-    <string name="url_phone_study_configuration">http://143.198.99.126/study/config.json</string>
-    <string name="url_phone_enroll">http://143.198.99.126/study/enroll-email.json</string>
+    <string name="url_phone_dashboard_configuration">https://server.miritmodigital.com/data/app-config.json</string>
+    <string name="url_phone_study_configuration">https://server.miritmodigital.com/study/config.json</string>
+    <string name="url_phone_enroll">https://server.miritmodigital.com/study/enroll-email.json</string>
 
     <string name="app_name">Mi Ritmo Digital</string>
 
@@ -12,9 +12,9 @@
     <string name="action_transmit_data">Transmit Data</string>
 
 
-    <string name="url_opt_out">http://143.198.99.126/study/deactivate/%1$s.json</string>
-    <string name="url_opt_in">http://143.198.99.126/study/activate/%1$s.json</string>
-    <string name="url_latest_version">http://143.198.99.126/study/latest-version.json</string>
+    <string name="url_opt_out">https://server.miritmodigital.com/study/deactivate/%1$s.json</string>
+    <string name="url_opt_in">https://server.miritmodigital.com/study/activate/%1$s.json</string>
+    <string name="url_latest_version">https://server.miritmodigital.com/study/latest-version.json</string>
 
     <string name="onboarding_sign_in">Welcome to Mi Ritmo Digital. This app has been developed for the Harvard Smartphone Study.\n\nTo continue, please enter your e-mail address below:</string>
     <string name="hint_onboarding_email">E-Mail Address</string>
