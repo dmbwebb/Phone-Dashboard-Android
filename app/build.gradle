@@ -11,8 +11,8 @@ android {
         applicationId "com.miritmodigital.app"
         minSdkVersion 24
         targetSdk 35
-        versionCode 95
-        versionName "95"
+        versionCode 97
+        versionName "97"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         manifestPlaceholders = [
                 appAuthRedirectScheme: "NOT-USED"
