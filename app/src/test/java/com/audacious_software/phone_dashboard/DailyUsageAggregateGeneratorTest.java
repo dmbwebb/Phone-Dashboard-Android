@@ -95,4 +95,59 @@ public class DailyUsageAggregateGeneratorTest {
         assertTrue("bogota bucket and utc bucket must differ at late-night boundary",
                 bogotaBucket != utcBucket);
     }
+
+    private static long invokeComputeNextFireTime(long now, TimeZone tz) throws Exception {
+        Method m = DailyUsageAggregateGenerator.class.getDeclaredMethod("computeNextFireTime", long.class, TimeZone.class);
+        m.setAccessible(true);
+        return (Long) m.invoke(null, now, tz);
+    }
+
+    @Test
+    public void nextFireTime_fromMorning_picksTodayAt1500_butAlwaysFuture() throws Exception {
+        // 02:00 Bogota — next 15:00 is later today.
+        TimeZone bogota = TimeZone.getTimeZone("America/Bogota");
+        Calendar cal = Calendar.getInstance(bogota);
+        cal.set(2026, Calendar.APRIL, 14, 2, 0, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        long now = cal.getTimeInMillis();
+
+        long fire = invokeComputeNextFireTime(now, bogota);
+
+        Calendar expected = Calendar.getInstance(bogota);
+        expected.set(2026, Calendar.APRIL, 14, 15, 0, 0);
+        expected.set(Calendar.MILLISECOND, 0);
+        assertEquals(expected.getTimeInMillis(), fire);
+        assertTrue("fire must be strictly in the future", fire > now);
+    }
+
+    @Test
+    public void nextFireTime_fromAfternoon_picksTomorrowAt1500() throws Exception {
+        TimeZone bogota = TimeZone.getTimeZone("America/Bogota");
+        Calendar cal = Calendar.getInstance(bogota);
+        cal.set(2026, Calendar.APRIL, 14, 15, 0, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        long now = cal.getTimeInMillis();
+
+        long fire = invokeComputeNextFireTime(now, bogota);
+
+        Calendar expected = Calendar.getInstance(bogota);
+        expected.set(2026, Calendar.APRIL, 15, 15, 0, 0);
+        expected.set(Calendar.MILLISECOND, 0);
+        assertEquals(expected.getTimeInMillis(), fire);
+    }
+
+    @Test
+    public void nextFireTime_atExactlyAlarmHour_picksTomorrow() throws Exception {
+        // At 15:00:00.000 sharp — strict future means tomorrow's 15:00.
+        TimeZone bogota = TimeZone.getTimeZone("America/Bogota");
+        Calendar cal = Calendar.getInstance(bogota);
+        cal.set(2026, Calendar.APRIL, 14, 15, 0, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        long now = cal.getTimeInMillis();
+
+        long fire = invokeComputeNextFireTime(now, bogota);
+
+        assertEquals(now + 24L * 60L * 60L * 1000L, fire);
+        assertTrue(fire > now);
+    }
 }
