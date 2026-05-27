@@ -48,14 +48,16 @@ public class KeepAliveService extends JobIntentService {
 
                 if (notify) {
                     NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-                    manager.notify(ForegroundService.getNotificationId(), note);
+                    if (manager != null) {
+                        manager.notify(ForegroundService.getNotificationId(), note);
+                    }
                 }
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 JobScheduler jobScheduler = (JobScheduler) this.getSystemService(Context.JOB_SCHEDULER_SERVICE);
 
-                if (jobScheduler.getPendingJob(KeepAliveJobService.JOB_ID) == null) {
+                if (jobScheduler != null && jobScheduler.getPendingJob(KeepAliveJobService.JOB_ID) == null) {
                     ComponentName component = new ComponentName(this, KeepAliveJobService.class);
 
                     JobInfo.Builder builder = new JobInfo.Builder(KeepAliveJobService.JOB_ID, component)

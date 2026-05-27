@@ -105,7 +105,7 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager noteManager = (NotificationManager) this.mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            if (noteManager.getNotificationChannel(context.getString(R.string.foreground_channel_id)) == null) {
+            if (noteManager != null && noteManager.getNotificationChannel(context.getString(R.string.foreground_channel_id)) == null) {
                 NotificationChannel channel = new NotificationChannel(context.getString(R.string.foreground_channel_id), this.mContext.getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW);
                 channel.setShowBadge(false);
                 channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
@@ -397,6 +397,13 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
                 public void onResponse(Call call, Response response) throws IOException {
                     try {
                         me.mFetchingConfig = false;
+
+                        if (response.body() == null) {
+                            if (skipInitialization == false) {
+                                me.start(userId);
+                            }
+                            return;
+                        }
 
                         String body = response.body().string();
 
@@ -1058,36 +1065,38 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
 
                     Cursor c = AppEvent.getInstance(context).queryHistory(null, where, args, null);
 
-                    while (c.moveToNext()) {
-                        long observed = c.getLong(c.getColumnIndex(AppEvent.HISTORY_OBSERVED));
-                        String details = c.getString(c.getColumnIndex(AppEvent.HISTORY_EVENT_DETAILS));
+                    if (c != null) {
+                        while (c.moveToNext()) {
+                            long observed = c.getLong(c.getColumnIndex(AppEvent.HISTORY_OBSERVED));
+                            String details = c.getString(c.getColumnIndex(AppEvent.HISTORY_EVENT_DETAILS));
 
-                        try {
-                            JSONObject detailsJson = new JSONObject(details);
+                            try {
+                                JSONObject detailsJson = new JSONObject(details);
 
-                            HashMap<String, Object> block = new HashMap<>();
+                                HashMap<String, Object> block = new HashMap<>();
 
-                            if (detailsJson.has("app")) {
-                                block.put("app", detailsJson.getString("app"));
+                                if (detailsJson.has("app")) {
+                                    block.put("app", detailsJson.getString("app"));
+                                }
+
+                                if (detailsJson.has("budget")) {
+                                    block.put("time_budget", detailsJson.getLong("budget"));
+                                }
+
+                                if (detailsJson.has("usage")) {
+                                    block.put("time_usage", detailsJson.getLong("usage"));
+                                }
+
+                                String dateKey = DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.format(observed);
+
+                                blocks.put(dateKey, block);
+                            } catch (JSONException ex) {
+                                ex.printStackTrace();
                             }
-
-                            if (detailsJson.has("budget")) {
-                                block.put("time_budget", detailsJson.getLong("budget"));
-                            }
-
-                            if (detailsJson.has("usage")) {
-                                block.put("time_usage", detailsJson.getLong("usage"));
-                            }
-
-                            String dateKey = DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.format(observed);
-
-                            blocks.put(dateKey, block);
-                        } catch (JSONException ex) {
-                            ex.printStackTrace();
                         }
-                    }
 
-                    c.close();
+                        c.close();
+                    }
 
                     payload.put("blocks", blocks);
                 }
@@ -1097,26 +1106,30 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
 
                     Cursor c = AppSnoozeGenerator.getInstance(context).queryHistory(null, null, null, null);
 
-                    while (c.moveToNext()) {
-                        long observed = c.getLong(c.getColumnIndex(AppSnoozeGenerator.HISTORY_OBSERVED));
+                    if (c != null) {
+                        while (c.moveToNext()) {
+                            long observed = c.getLong(c.getColumnIndex(AppSnoozeGenerator.HISTORY_OBSERVED));
 
-                        HashMap<String, Object> snooze = new HashMap<>();
+                            HashMap<String, Object> snooze = new HashMap<>();
 
-                        snooze.put(AppSnoozeGenerator.HISTORY_OBSERVED, observed);
-                        snooze.put(AppSnoozeGenerator.HISTORY_APP_PACKAGE, c.getString(c.getColumnIndex(AppSnoozeGenerator.HISTORY_APP_PACKAGE)));
-                        snooze.put(AppSnoozeGenerator.HISTORY_DURATION, c.getLong(c.getColumnIndex(AppSnoozeGenerator.HISTORY_DURATION)));
+                            snooze.put(AppSnoozeGenerator.HISTORY_OBSERVED, observed);
+                            snooze.put(AppSnoozeGenerator.HISTORY_APP_PACKAGE, c.getString(c.getColumnIndex(AppSnoozeGenerator.HISTORY_APP_PACKAGE)));
+                            snooze.put(AppSnoozeGenerator.HISTORY_DURATION, c.getLong(c.getColumnIndex(AppSnoozeGenerator.HISTORY_DURATION)));
 
-                        if (c.isNull(c.getColumnIndex(AppSnoozeGenerator.HISTORY_ORIGINAL_BUDGET)) == false) {
-                            snooze.put(AppSnoozeGenerator.HISTORY_ORIGINAL_BUDGET, c.getDouble(c.getColumnIndex(AppSnoozeGenerator.HISTORY_ORIGINAL_BUDGET)));
+                            if (c.isNull(c.getColumnIndex(AppSnoozeGenerator.HISTORY_ORIGINAL_BUDGET)) == false) {
+                                snooze.put(AppSnoozeGenerator.HISTORY_ORIGINAL_BUDGET, c.getDouble(c.getColumnIndex(AppSnoozeGenerator.HISTORY_ORIGINAL_BUDGET)));
+                            }
+
+                            if (c.isNull(c.getColumnIndex(AppSnoozeGenerator.HISTORY_REMAINING_BUDGET)) == false) {
+                                snooze.put(AppSnoozeGenerator.HISTORY_REMAINING_BUDGET, c.getDouble(c.getColumnIndex(AppSnoozeGenerator.HISTORY_REMAINING_BUDGET)));
+                            }
+
+                            String dateKey = DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.format(observed);
+
+                            snoozes.put(dateKey, snooze);
                         }
 
-                        if (c.isNull(c.getColumnIndex(AppSnoozeGenerator.HISTORY_REMAINING_BUDGET)) == false) {
-                            snooze.put(AppSnoozeGenerator.HISTORY_REMAINING_BUDGET, c.getDouble(c.getColumnIndex(AppSnoozeGenerator.HISTORY_REMAINING_BUDGET)));
-                        }
-
-                        String dateKey = DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.format(observed);
-
-                        snoozes.put(dateKey, snooze);
+                        c.close();
                     }
 
                     payload.put("snoozes", snoozes);
@@ -1153,23 +1166,25 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
 
                     Cursor c = AppEvent.getInstance(context).queryHistory(null, where, events, null);
 
-                    while (c.moveToNext()) {
-                        long observed = c.getLong(c.getColumnIndex(AppEvent.HISTORY_OBSERVED));
-                        String event = c.getString(c.getColumnIndex(AppEvent.HISTORY_EVENT_NAME));
-                        String details = c.getString(c.getColumnIndex(AppEvent.HISTORY_EVENT_DETAILS));
+                    if (c != null) {
+                        while (c.moveToNext()) {
+                            long observed = c.getLong(c.getColumnIndex(AppEvent.HISTORY_OBSERVED));
+                            String event = c.getString(c.getColumnIndex(AppEvent.HISTORY_EVENT_NAME));
+                            String details = c.getString(c.getColumnIndex(AppEvent.HISTORY_EVENT_DETAILS));
 
-                        HashMap<String, Object> warningEvent = new HashMap<>();
+                            HashMap<String, Object> warningEvent = new HashMap<>();
 
-                        String dateKey = DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.format(observed);
+                            String dateKey = DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.format(observed);
 
-                        warningEvent.put("event", event);
-                        warningEvent.put("date", dateKey);
-                        warningEvent.put("details", details);
+                            warningEvent.put("event", event);
+                            warningEvent.put("date", dateKey);
+                            warningEvent.put("details", details);
 
-                        warningEvents.put(dateKey, warningEvent);
+                            warningEvents.put(dateKey, warningEvent);
+                        }
+
+                        c.close();
                     }
-
-                    c.close();
 
                     payload.put("warning-events", warningEvents);
                 }
@@ -1200,23 +1215,25 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
 
                     Cursor c = AppEvent.getInstance(context).queryHistory(null, where, events, null);
 
-                    while (c.moveToNext()) {
-                        long observed = c.getLong(c.getColumnIndex(AppEvent.HISTORY_OBSERVED));
-                        String event = c.getString(c.getColumnIndex(AppEvent.HISTORY_EVENT_NAME));
-                        String details = c.getString(c.getColumnIndex(AppEvent.HISTORY_EVENT_DETAILS));
+                    if (c != null) {
+                        while (c.moveToNext()) {
+                            long observed = c.getLong(c.getColumnIndex(AppEvent.HISTORY_OBSERVED));
+                            String event = c.getString(c.getColumnIndex(AppEvent.HISTORY_EVENT_NAME));
+                            String details = c.getString(c.getColumnIndex(AppEvent.HISTORY_EVENT_DETAILS));
 
-                        HashMap<String, Object> warningEvent = new HashMap<>();
+                            HashMap<String, Object> warningEvent = new HashMap<>();
 
-                        String dateKey = DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.format(observed);
+                            String dateKey = DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.format(observed);
 
-                        warningEvent.put("event", event);
-                        warningEvent.put("date", dateKey);
-                        warningEvent.put("details", details);
+                            warningEvent.put("event", event);
+                            warningEvent.put("date", dateKey);
+                            warningEvent.put("details", details);
 
-                        budgetEvents.put(dateKey, warningEvent);
+                            budgetEvents.put(dateKey, warningEvent);
+                        }
+
+                        c.close();
                     }
-
-                    c.close();
 
                     payload.put("budget-events", budgetEvents);
                 }

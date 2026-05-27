@@ -38,11 +38,13 @@ public class EditBudgetActivity extends AppCompatActivity {
             this.mInitialSetup = true;
         }
 
-        this.getSupportActionBar().setTitle(R.string.title_app_limits);
-        this.getSupportActionBar().setSubtitle(R.string.subtitle_app_limits);
+        if (this.getSupportActionBar() != null) {
+            this.getSupportActionBar().setTitle(R.string.title_app_limits);
+            this.getSupportActionBar().setSubtitle(R.string.subtitle_app_limits);
 
-        if (this.mInitialSetup == false) {
-            this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if (this.mInitialSetup == false) {
+                this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
         }
 
         RecyclerView budgets = this.findViewById(R.id.list_user_budgets);
@@ -102,7 +104,7 @@ public class EditBudgetActivity extends AppCompatActivity {
 
         EditBudgetAdapter adapter = (EditBudgetAdapter) budgets.getAdapter();
 
-        if (adapter.isDirty()) {
+        if (adapter != null && adapter.isDirty()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.dialog_title_confirm_dirty_save);
             builder.setMessage(R.string.dialog_message_confirm_dirty_save);

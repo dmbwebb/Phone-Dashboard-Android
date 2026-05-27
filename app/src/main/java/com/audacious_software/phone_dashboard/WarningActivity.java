@@ -83,8 +83,18 @@ public class WarningActivity extends Activity {
 
         Bundle extras = this.getIntent().getExtras();
 
+        if (extras == null) {
+            this.finish();
+            return;
+        }
+
         final String packageName = extras.getString(WarningActivity.PACKAGE_NAME);
         final String packageLabel = extras.getString(WarningActivity.PACKAGE_LABEL);
+
+        if (packageName == null || packageLabel == null) {
+            this.finish();
+            return;
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -242,8 +252,18 @@ public class WarningActivity extends Activity {
 
         Bundle extras = this.getIntent().getExtras();
 
+        if (extras == null) {
+            this.finish();
+            return;
+        }
+
         final String packageName = extras.getString(WarningActivity.PACKAGE_NAME);
         final String packageLabel = extras.getString(WarningActivity.PACKAGE_LABEL);
+
+        if (packageName == null || packageLabel == null) {
+            this.finish();
+            return;
+        }
 
         final HashMap<String, Object> payload = new HashMap<>();
         payload.put("package", packageName);

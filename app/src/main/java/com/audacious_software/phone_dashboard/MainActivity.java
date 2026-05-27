@@ -48,7 +48,9 @@ public class MainActivity extends AppCompatActivity {
 
         final MainActivity me = this;
 
-        me.getSupportActionBar().setTitle(R.string.app_name);
+        if (me.getSupportActionBar() != null) {
+            me.getSupportActionBar().setTitle(R.string.app_name);
+        }
 
         this.mTodayBudgetAdapter = new BudgetAdapter(this, System.currentTimeMillis(), 1, true);
         this.mWeekBudgetAdapter = new BudgetAdapter(this, System.currentTimeMillis(), 7, false);
@@ -118,7 +120,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        tabs.getTabAt(0).select();
+        if (tabs.getTabAt(0) != null) {
+            tabs.getTabAt(0).select();
+        }
 
         this.mHandler = new Handler();
     }
