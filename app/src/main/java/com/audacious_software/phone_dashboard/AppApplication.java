@@ -27,6 +27,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.audacious_software.passive_data_kit.Logger;
 import com.audacious_software.passive_data_kit.PassiveDataKitApplication;
 import com.audacious_software.passive_data_kit.generators.device.ForegroundApplication;
+import com.audacious_software.phone_dashboard.survey.SurveyScheduler;
 import com.github.anrwatchdog.ANRError;
 import com.github.anrwatchdog.ANRWatchDog;
 import com.google.android.material.textfield.TextInputEditText;
@@ -137,6 +138,10 @@ public class AppApplication extends Application implements PassiveDataKitApplica
                 Logger.getInstance(me).logThrowable(error);
             }
         }).start();
+
+        // Arm the nightly survey; setAndAllowWhileIdle is idempotent, so re-arming
+        // on every launch is a cheap safety net if an alarm was dropped.
+        SurveyScheduler.schedule(this);
     }
 
     public String getIdentifier() {

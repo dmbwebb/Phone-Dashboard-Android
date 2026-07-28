@@ -15,6 +15,7 @@
         <item>com.audacious_software.phone_dashboard.DailyBudgetGenerator</item>
         <item>com.audacious_software.phone_dashboard.AppSnoozeGenerator</item>
         <item>com.audacious_software.phone_dashboard.SnoozeDelayGenerator</item>
+        <item>com.audacious_software.phone_dashboard.DailySurveyGenerator</item>
     </string-array>
 
     <string name="generator_daily_app_budget_create_history_table" translatable="false">CREATE TABLE history(_id INTEGER PRIMARY KEY AUTOINCREMENT, fetched INTEGER, transmitted INTEGER, observed INTEGER, effective_on LONG, budget TEXT);</string>
@@ -24,4 +25,6 @@
     <string name="generator_app_snooze_add_remaining_budget" translatable="false">ALTER TABLE history ADD COLUMN remaining_budget REAL;</string>
 
     <string name="generator_snooze_delay_create_history_table" translatable="false">CREATE TABLE history(_id INTEGER PRIMARY KEY AUTOINCREMENT, fetched INTEGER, transmitted INTEGER, observed INTEGER, effective_on LONG, snooze_delay INTEGER);</string>
+
+    <string name="generator_daily_survey_create_responses_table" translatable="false">CREATE TABLE responses(_id INTEGER PRIMARY KEY AUTOINCREMENT, fetched INTEGER, transmitted INTEGER, observed INTEGER, survey_id TEXT, question_key TEXT, question_text TEXT, question_type TEXT, response_values TEXT, response_labels TEXT, other_text TEXT, dismissed INTEGER, prompt_shown_at LONG, responded_at LONG, engine TEXT);</string>
 </resources>

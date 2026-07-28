@@ -310,4 +310,72 @@
 
     <string name="action_dont_show_again">Don\'t Show Again</string>
     <string name="action_continue">Continue</string>
+
+    <!-- Language toggle -->
+    <string name="settings_language">Language</string>
+    <string-array name="language_entries">
+        <item>English</item>
+        <item>Español</item>
+    </string-array>
+    <string-array name="language_values" translatable="false">
+        <item>en</item>
+        <item>es</item>
+    </string-array>
+
+    <!-- Nightly survey -->
+    <string name="survey_note_title">Mi Ritmo Digital</string>
+    <string name="survey_note_message">Got a minute? Tap to answer a few quick questions.</string>
+    <string name="survey_note_channel_name">Daily check-in</string>
+    <string name="survey_note_channel_description">Nightly questions about your day.</string>
+    <string name="survey_progress_format" translatable="false">%1$d / %2$d</string>
+    <string name="survey_hint_single">Choose one</string>
+    <string name="survey_hint_multi">Select all that apply</string>
+    <string name="survey_action_continue">Continue</string>
+    <string name="survey_action_back">Back</string>
+    <string name="survey_action_skip">Skip</string>
+    <string name="survey_thanks">Thanks for answering!</string>
+    <string name="survey_other_hint">Write your answer</string>
+    <string name="survey_other_required">Please write your answer.</string>
+
+    <string name="survey_q_phone_activity">What were you doing on your phone just now?</string>
+    <string-array name="survey_opts_phone_activity">
+        <item>Watching videos or streams</item>
+        <item>Scrolling through posts or stories</item>
+        <item>Chatting or messaging</item>
+        <item>Posting or commenting</item>
+        <item>Playing a game</item>
+        <item>Homework or looking something up</item>
+        <item>Listening to music</item>
+        <item>Other</item>
+    </string-array>
+
+    <string name="survey_q_current_affect">Right now, do you feel any of these?</string>
+    <string-array name="survey_opts_current_affect">
+        <item>Happy</item>
+        <item>Calm</item>
+        <item>Excited</item>
+        <item>Sad</item>
+        <item>Worried</item>
+        <item>Irritated</item>
+        <item>Bored</item>
+        <item>None of these</item>
+    </string-array>
+
+    <string name="survey_q_sleep_hours">How many hours did you sleep last night?</string>
+    <string-array name="survey_opts_sleep_hours">
+        <item>Less than 6</item>
+        <item>6–7</item>
+        <item>7–8</item>
+        <item>8–9</item>
+        <item>More than 9</item>
+    </string-array>
+
+    <string name="survey_q_social_time">Yesterday, how much time did you spend with friends in person (not counting class time)?</string>
+    <string-array name="survey_opts_social_time">
+        <item>None</item>
+        <item>Less than 30 min</item>
+        <item>30 min–1 hour</item>
+        <item>1–2 hours</item>
+        <item>More than 2 hours</item>
+    </string-array>
 </resources>

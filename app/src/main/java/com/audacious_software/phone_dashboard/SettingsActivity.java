@@ -28,7 +28,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.Preference;
+import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
+
+import com.audacious_software.phone_dashboard.survey.AppLocale;
 import androidx.preference.PreferenceManager;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -69,6 +72,20 @@ public class SettingsActivity extends AppCompatActivity {
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(me);
             prefs.registerOnSharedPreferenceChangeListener(this);
+
+            ListPreference language = this.findPreference("pref_app_language");
+            if (language != null) {
+                // Locale is owned by AppCompat (not SharedPreferences), so seed the
+                // control from the active locale and apply changes straight through.
+                language.setValue(AppLocale.effectiveTag(me));
+                language.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        AppLocale.setLanguage((String) newValue);
+                        return true;
+                    }
+                });
+            }
         }
 
         public void onPause()

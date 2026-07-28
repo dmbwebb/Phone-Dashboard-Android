@@ -17,6 +17,15 @@
         <androidx.preference.Preference app:title="@string/placeholder_app_version" app:summary="@string/label_app_version" app:key="com.audacious_software.phone_dashboard.SettingsActivity.APP_VERSION" />
         <androidx.preference.Preference app:title="@string/settings_irb_number" app:summary="@string/settings_irb_summary" />
     </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory app:title="@string/settings_language">
+        <androidx.preference.ListPreference
+            app:key="pref_app_language"
+            app:title="@string/settings_language"
+            app:entries="@array/language_entries"
+            app:entryValues="@array/language_values"
+            app:persistent="false"
+            app:useSimpleSummaryProvider="true" />
+    </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory app:title="@string/settings_more_information">
         <androidx.preference.Preference app:title="@string/settings_acknowledgements" app:key="com.audacious_software.phone_dashboard.SettingsActivity.ACKNOWLEDGEMENTS" />
     </androidx.preference.PreferenceCategory>

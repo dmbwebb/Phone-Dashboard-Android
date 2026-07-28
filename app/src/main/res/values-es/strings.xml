@@ -262,4 +262,62 @@
 
     <string name="action_dont_show_again">No Mostrar de Nuevo</string>
     <string name="action_continue">Continuar</string>
+
+    <!-- Idioma -->
+    <string name="settings_language">Idioma</string>
+
+    <!-- Chequeo diario nocturno -->
+    <string name="survey_note_message">¿Tienes un momento? Toca para responder unas preguntas rápidas.</string>
+    <string name="survey_note_channel_name">Chequeo diario</string>
+    <string name="survey_note_channel_description">Preguntas nocturnas sobre tu día.</string>
+    <string name="survey_hint_single">Elige una opción</string>
+    <string name="survey_hint_multi">Selecciona todas las que apliquen</string>
+    <string name="survey_action_continue">Continuar</string>
+    <string name="survey_action_back">Atrás</string>
+    <string name="survey_action_skip">Omitir</string>
+    <string name="survey_thanks">¡Gracias por responder!</string>
+    <string name="survey_other_hint">Escribe tu respuesta</string>
+    <string name="survey_other_required">Por favor escribe tu respuesta.</string>
+
+    <string name="survey_q_phone_activity">¿Qué estabas haciendo en tu celular justo ahora?</string>
+    <string-array name="survey_opts_phone_activity">
+        <item>Viendo videos o transmisiones</item>
+        <item>Viendo publicaciones o historias</item>
+        <item>Chateando o enviando mensajes</item>
+        <item>Publicando o comentando</item>
+        <item>Jugando un juego</item>
+        <item>Tarea o buscar algo</item>
+        <item>Escuchando música</item>
+        <item>Otra cosa</item>
+    </string-array>
+
+    <string name="survey_q_current_affect">En este momento, ¿sientes alguna de estas?</string>
+    <string-array name="survey_opts_current_affect">
+        <item>Alegre</item>
+        <item>Tranquilo/a</item>
+        <item>Emocionado/a</item>
+        <item>Triste</item>
+        <item>Preocupado/a</item>
+        <item>Irritado/a</item>
+        <item>Aburrido/a</item>
+        <item>Ninguna de estas</item>
+    </string-array>
+
+    <string name="survey_q_sleep_hours">¿Cuántas horas dormiste anoche?</string>
+    <string-array name="survey_opts_sleep_hours">
+        <item>Menos de 6</item>
+        <item>6–7</item>
+        <item>7–8</item>
+        <item>8–9</item>
+        <item>Más de 9</item>
+    </string-array>
+
+    <string name="survey_q_social_time">Ayer, ¿cuánto tiempo pasaste con amigos en persona (sin contar el tiempo de clase)?</string>
+    <string-array name="survey_opts_social_time">
+        <item>Nada</item>
+        <item>Menos de 30 min</item>
+        <item>30 min–1 hora</item>
+        <item>1–2 horas</item>
+        <item>Más de 2 horas</item>
+    </string-array>
 </resources>
