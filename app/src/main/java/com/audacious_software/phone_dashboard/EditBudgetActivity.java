@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -51,6 +52,13 @@ public class EditBudgetActivity extends AppCompatActivity {
 
         budgets.setHasFixedSize(true);
         budgets.setLayoutManager(new LinearLayoutManager(this));
+
+        this.getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                EditBudgetActivity.this.confirmDirtyExit();
+            }
+        });
     }
 
     @Override
@@ -127,10 +135,6 @@ public class EditBudgetActivity extends AppCompatActivity {
         } else {
             me.finish();
         }
-    }
-
-    public void onBackPressed() {
-        this.confirmDirtyExit();
     }
 
     @SuppressLint("InflateParams")

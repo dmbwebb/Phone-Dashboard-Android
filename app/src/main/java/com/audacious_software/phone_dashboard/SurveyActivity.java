@@ -1,6 +1,5 @@
 package com.audacious_software.phone_dashboard;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
@@ -29,7 +28,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * The nightly survey screen. Presents the {@link Survey}'s questions one at a
@@ -44,7 +45,7 @@ import androidx.annotation.Nullable;
  * survey finishes, when it is skipped, and in {@link #onStop()} so a survey
  * abandoned mid-way still records what was answered.
  */
-public class SurveyActivity extends Activity {
+public class SurveyActivity extends AppCompatActivity {
     // The question bubble's emerald, so a restored choice reads as picked against
     // the default grey of the others.
     private static final int CHOICE_SELECTED_TINT = 0xFFA7F3D0;
@@ -100,6 +101,17 @@ public class SurveyActivity extends Activity {
 
         SurveyScheduler.cancelNotification(this);
 
+        this.getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (SurveyActivity.this.mIndex > 0) {
+                    SurveyActivity.this.goBack();
+                } else {
+                    SurveyActivity.this.skipSurvey();
+                }
+            }
+        });
+
         Button skip = this.findViewById(R.id.survey_skip);
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,15 +138,6 @@ public class SurveyActivity extends Activity {
         // The activity may never come back (participant went home, system reclaimed
         // it) — keep whatever has been answered so far.
         this.flushAnswers();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (this.mIndex > 0) {
-            this.goBack();
-        } else {
-            this.skipSurvey();
-        }
     }
 
     private void renderQuestion(int index) {

@@ -21,7 +21,10 @@ public class KeepAliveJobService extends JobService {
 
         KeepAliveService.enqueueWork(this, KeepAliveService.class, KeepAliveService.JOB_ID, fireIntent);
 
-        return true;
+        // Enqueueing is synchronous from this JobService's perspective. The
+        // separate JobIntentService owns the actual work, so there is no
+        // outstanding JobService work that requires jobFinished().
+        return false;
     }
 
     @Override
