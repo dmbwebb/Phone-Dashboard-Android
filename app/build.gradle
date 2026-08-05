@@ -8,7 +8,7 @@ android {
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.miritmodigital.app"
+        applicationId project.findProperty("releaseApplicationId") ?: "com.miritmodigital.app"
         minSdkVersion 24
         targetSdk 36
         versionCode 103
