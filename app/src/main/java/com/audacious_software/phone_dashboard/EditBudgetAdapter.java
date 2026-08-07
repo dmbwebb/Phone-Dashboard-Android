@@ -24,6 +24,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.audacious_software.passive_data_kit.PackageManagerUtils;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
@@ -185,7 +187,7 @@ public class EditBudgetAdapter extends RecyclerView.Adapter<EditBudgetAdapter.Vi
         for (ApplicationInfo info : appsList) {
             HashMap<String, Object> appInfo = new HashMap<>();
 
-            if (packages.getLaunchIntentForPackage(info.packageName) != null) {
+            if (PackageManagerUtils.safeGetLaunchIntentForPackage(packages, info.packageName) != null) {
                 appInfo.put(EditBudgetAdapter.APP_PACKAGE, info.packageName);
                 appInfo.put(EditBudgetAdapter.APP_LABEL, packages.getApplicationLabel(info).toString());
 

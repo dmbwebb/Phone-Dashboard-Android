@@ -30,6 +30,7 @@ import com.audacious_software.passive_data_kit.generators.device.ScreenState;
 import com.audacious_software.passive_data_kit.generators.diagnostics.AppEvent;
 import com.audacious_software.passive_data_kit.generators.diagnostics.SystemStatus;
 import com.audacious_software.passive_data_kit.transmitters.HttpTransmitter;
+import com.audacious_software.passive_data_kit.PackageManagerUtils;
 import com.audacious_software.passive_data_kit.transmitters.Transmitter;
 import com.google.firebase.FirebaseApp;
 
@@ -689,7 +690,7 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
                         Intent launchIntent = launchIntents.get(info.packageName);
 
                         if (launchIntent == null) {
-                            launchIntent = packages.getLaunchIntentForPackage(info.packageName);
+                            launchIntent = PackageManagerUtils.safeGetLaunchIntentForPackage(packages, info.packageName);
 
                             if (launchIntent == null) {
                                 if (replacements.contains(info.packageName)) {
@@ -830,7 +831,7 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
                             Intent launchIntent = launchIntents.get(info.packageName);
 
                             if (launchIntent == null) {
-                                launchIntent = packages.getLaunchIntentForPackage(info.packageName);
+                                launchIntent = PackageManagerUtils.safeGetLaunchIntentForPackage(packages, info.packageName);
 
                                 if (launchIntent == null) {
                                     if (replacements.contains(info.packageName)) {
@@ -961,7 +962,7 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
                         Intent launchIntent = launchIntents.get(info.packageName);
 
                         if (launchIntent == null) {
-                            launchIntent = packages.getLaunchIntentForPackage(info.packageName);
+                            launchIntent = PackageManagerUtils.safeGetLaunchIntentForPackage(packages, info.packageName);
 
                             if (launchIntent == null) {
                                 if (replacements.contains(info.packageName)) {

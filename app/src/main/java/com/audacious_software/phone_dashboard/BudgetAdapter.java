@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.audacious_software.passive_data_kit.generators.device.ForegroundApplication;
+import com.audacious_software.passive_data_kit.PackageManagerUtils;
 
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
@@ -401,7 +402,7 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
                             BudgetAdapter.sLaunchIntents.put(info.packageName, launchIntent);
                         } else {
                             if (launchIntent == null) {
-                                launchIntent = packages.getLaunchIntentForPackage(info.packageName);
+                                launchIntent = PackageManagerUtils.safeGetLaunchIntentForPackage(packages, info.packageName);
 
                                 if (launchIntent == null) {
                                     launchIntent = new Intent("");

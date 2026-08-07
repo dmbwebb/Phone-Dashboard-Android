@@ -11,8 +11,8 @@ android {
         applicationId project.findProperty("releaseApplicationId") ?: "com.miritmodigital.app"
         minSdkVersion 24
         targetSdk 36
-        versionCode 103
-        versionName "103"
+        versionCode 104
+        versionName "104"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         manifestPlaceholders = [
                 appAuthRedirectScheme: "NOT-USED"
@@ -57,13 +57,17 @@ android {
             buildConfigField("String","VERSION_NAME","\"${defaultConfig.versionName}\"")        }
         debug {
             debuggable true
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField("long", "VERSION_CODE", "${defaultConfig.versionCode}")
             buildConfigField("String","VERSION_NAME","\"${defaultConfig.versionName}\"")        }
     }
     lint {
         warning 'InvalidPackage'
+    }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
     }
 
 
@@ -77,6 +81,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.preference:preference:1.2.1'
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.23.0'
+    testImplementation 'org.robolectric:robolectric:4.16.1'
     androidTestImplementation 'androidx.test:core:1.5.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test:rules:1.5.0'
