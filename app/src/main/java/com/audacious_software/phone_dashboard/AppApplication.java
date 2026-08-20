@@ -62,6 +62,11 @@ public class AppApplication extends Application implements PassiveDataKitApplica
     public static final String TAG = "Phone-Dashboard";
 
     private static final String IDENTIFIER = "com.audacious_software.phone_dashboard.IDENTIFIER";
+
+    private static final String ROLE = "com.audacious_software.phone_dashboard.ROLE";
+    public static final String ROLE_CHILD = "child";
+    public static final String ROLE_PARENT = "parent";
+
     private static final String LAST_CONFIGURATION_REFRESH = "com.audacious_software.phone_dashboard.LAST_CONFIGURATION_REFRESH";
     private static final long LAST_CONFIGURATION_REFRESH_INTERVAL = 60 * 60 * 1000;
 
@@ -161,7 +166,20 @@ public class AppApplication extends Application implements PassiveDataKitApplica
         FirebaseCrashlytics.getInstance().setUserId(identifier);
     }
 
-    public void enrollEmail(final String email, final Runnable success, final Runnable failure) {
+    public String getRole() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        return prefs.getString(AppApplication.ROLE, null);
+    }
+
+    public void setRole(String role) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor e = prefs.edit();
+        e.putString(AppApplication.ROLE, role);
+        e.apply();
+    }
+
+    public void enrollEmail(final String email, final String role, final Runnable success, final Runnable failure) {
         final AppApplication me = this;
 
         OkHttpClient client = new OkHttpClient();
@@ -177,6 +195,7 @@ public class AppApplication extends Application implements PassiveDataKitApplica
 
         RequestBody formBody = new FormBody.Builder()
                 .add("email", email)
+                .add("role", role)
                 .build();
 
         Request request = new Request.Builder()
@@ -210,6 +229,7 @@ public class AppApplication extends Application implements PassiveDataKitApplica
 
                     if (config.has("identifier")) {
                         me.setIdentifier(config.getString("identifier"));
+                        me.setRole(role);
 
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(me);
                         SharedPreferences.Editor e = prefs.edit();

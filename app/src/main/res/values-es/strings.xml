@@ -11,6 +11,13 @@
     <string name="onboarding_sign_in">Bienvenido a Mi Ritmo Digital. Esta aplicación ha sido desarrollada para el Estudio Harvard sobre el Uso del Teléfono.\n\nPara continuar, ingrese su dirección de correo electrónico:</string>
     <string name="hint_onboarding_email">Correo Electrónico</string>
 
+    <string name="onboarding_role_question">¿De quién es este celular?</string>
+    <string name="onboarding_role_child">Del estudiante</string>
+    <string name="onboarding_role_parent">Del padre, madre o acudiente</string>
+
+    <string name="title_missing_role">Selección Requerida</string>
+    <string name="message_missing_role">Por favor indique de quién es este celular antes de continuar.</string>
+
     <string name="message_no_user_budgets">La configuración seleccionada no permite establecer límites de uso de aplicaciones.\n\nToque el botón "Siguiente" arriba para continuar.</string>
 
     <string name="title_onboarding">¡Bienvenido!</string>
@@ -137,6 +144,10 @@
     <string name="message_email_validated">Se ha inscrito exitosamente en el estudio sobre el Uso del Teléfono. Su código de aplicación es\n\n%1$s\n\nRecibirá un correo electrónico con este código. Por favor registre este código de 8 dígitos en la encuesta para confirmar su identidad.</string>
 
     <string name="label_app_code">Código de Aplicación</string>
+
+    <string name="label_app_role">Perfil</string>
+    <string name="role_label_child">Estudiante</string>
+    <string name="role_label_parent">Padre, madre o acudiente</string>
 
     <string name="tab_today">Hoy</string>
     <string name="tab_week">Semana</string>

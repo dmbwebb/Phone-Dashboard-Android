@@ -104,6 +104,57 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <!-- Phone Owner Role -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/backgroundMain">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="20dp">
+
+                            <TextView
+                                android:text="@string/onboarding_role_question"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/textPrimary" />
+
+                            <RadioGroup
+                                android:id="@+id/group_phone_role"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:orientation="vertical">
+
+                                <com.google.android.material.radiobutton.MaterialRadioButton
+                                    android:id="@+id/role_child"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/onboarding_role_child"
+                                    android:textSize="16sp"
+                                    android:textColor="@color/textPrimary" />
+
+                                <com.google.android.material.radiobutton.MaterialRadioButton
+                                    android:id="@+id/role_parent"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/onboarding_role_parent"
+                                    android:textSize="16sp"
+                                    android:textColor="@color/textPrimary" />
+                            </RadioGroup>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0dp"

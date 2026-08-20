@@ -22,6 +22,7 @@ import java.util.Locale;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.audacious_software.passive_data_kit.Logger;
@@ -213,6 +214,7 @@ public class OnboardingActivity extends AppCompatActivity {
         this.mToolbar.setSubtitle(R.string.subtitle_onboarding);
 
         final TextInputEditText emailField = this.findViewById(R.id.field_email);
+        final RadioGroup roleGroup = this.findViewById(R.id.group_phone_role);
 
         this.showPage(R.id.step_welcome, R.string.action_sign_in, new View.OnClickListener() {
             @Override
@@ -236,7 +238,28 @@ public class OnboardingActivity extends AppCompatActivity {
                     return;
                 }
 
-                me.mApp.enrollEmail(email, new Runnable() {
+                int checkedRoleId = roleGroup.getCheckedRadioButtonId();
+
+                if (checkedRoleId == -1) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(me);
+                    builder.setTitle(R.string.title_missing_role);
+                    builder.setMessage(R.string.message_missing_role);
+
+                    builder.setPositiveButton(R.string.action_continue, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+
+                    builder.create().show();
+
+                    return;
+                }
+
+                final String role = (checkedRoleId == R.id.role_parent) ? AppApplication.ROLE_PARENT : AppApplication.ROLE_CHILD;
+
+                me.mApp.enrollEmail(email, role, new Runnable() {
                     @Override
                     public void run() {
                         me.runOnUiThread(new Runnable() {
