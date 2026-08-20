@@ -2,6 +2,7 @@
 <androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.preference.PreferenceCategory app:title="@string/settings_user_info">
         <androidx.preference.Preference app:summary="@string/label_app_code" app:key="com.audacious_software.phone_dashboard.SettingsActivity.APP_CODE" />
+        <androidx.preference.Preference app:summary="@string/label_app_role" app:key="com.audacious_software.phone_dashboard.SettingsActivity.APP_ROLE" />
         <androidx.preference.Preference app:title="@string/placeholder_app_budget_status" app:summary="@string/label_app_usage_limit_function" app:key="com.audacious_software.phone_dashboard.SettingsActivity.BLOCKING_STATUS" />
         <!-- <androidx.preference.Preference app:title="" app:summary="@string/label_app_receives_subsidy" app:key="com.audacious_software.phone_dashboard.SettingsActivity.RECEIVES_SUBSIDY" /> -->
         <!-- <androidx.preference.Preference app:title="" app:summary="@string/label_app_blocker_type" app:key="com.audacious_software.phone_dashboard.SettingsActivity.BLOCKER_TYPE" /> -->

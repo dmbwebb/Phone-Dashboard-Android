@@ -58,6 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String BLOCKING_STATUS = "com.audacious_software.phone_dashboard.SettingsActivity.BLOCKING_STATUS";
     private static final String TREATMENT_STATUS = "com.audacious_software.phone_dashboard.SettingsActivity.TREATMENT_STATUS";
     private static final String APP_CODE = "com.audacious_software.phone_dashboard.SettingsActivity.APP_CODE";
+    private static final String APP_ROLE = "com.audacious_software.phone_dashboard.SettingsActivity.APP_ROLE";
     // private static final String PERIOD_START = "com.audacious_software.phone_dashboard.SettingsActivity.PERIOD_START";
     private static final String ACKNOWLEDGEMENTS = "com.audacious_software.phone_dashboard.SettingsActivity.ACKNOWLEDGEMENTS";
     private static final String SHOW_SNOOZE_DELAY_MESSAGE = "com.audacious_software.phone_dashboard.SettingsActivity.SHOW_SNOOZE_DELAY_MESSAGE";
@@ -283,6 +284,19 @@ public class SettingsActivity extends AppCompatActivity {
 
             Preference appCode = this.findPreference(SettingsActivity.APP_CODE);
             appCode.setTitle(app.getIdentifier());
+
+            Preference appRole = this.findPreference(SettingsActivity.APP_ROLE);
+
+            String role = app.getRole();
+
+            if (AppApplication.ROLE_PARENT.equals(role)) {
+                appRole.setTitle(R.string.role_label_parent);
+            } else if (AppApplication.ROLE_CHILD.equals(role)) {
+                appRole.setTitle(R.string.role_label_child);
+            } else {
+                // Installs enrolled before the role choice existed have no stored role.
+                appRole.setVisible(false);
+            }
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(me);
 
