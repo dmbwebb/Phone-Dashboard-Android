@@ -144,7 +144,7 @@ public class AppApplication extends Application implements PassiveDataKitApplica
             }
         }).start();
 
-        // Arm the nightly survey; setAndAllowWhileIdle is idempotent, so re-arming
+        // Arm the scheduled survey; setAndAllowWhileIdle is idempotent, so re-arming
         // on every launch is a cheap safety net if an alarm was dropped.
         SurveyScheduler.schedule(this);
     }
@@ -177,6 +177,8 @@ public class AppApplication extends Application implements PassiveDataKitApplica
         SharedPreferences.Editor e = prefs.edit();
         e.putString(AppApplication.ROLE, role);
         e.apply();
+
+        SurveyScheduler.schedule(this);
     }
 
     public void enrollEmail(final String email, final String role, final Runnable success, final Runnable failure) {

@@ -33,7 +33,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
- * The nightly survey screen. Presents the {@link Survey}'s questions one at a
+ * The scheduled survey screen. Presents the {@link Survey}'s questions one at a
  * time: single-choice questions advance on tap; multi-choice questions show
  * checkboxes plus a Continue button. Choosing an "other" option opens a write-in
  * box that has to be filled before moving on. Back (the button or the system

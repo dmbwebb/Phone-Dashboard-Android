@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Passive Data Kit generator for the nightly in-app survey.
+ * Passive Data Kit generator for the scheduled in-app survey.
  *
  * Emits ONE {@code daily-survey-response} data point per answered question, so
  * item-level (and partial-completion) analysis is possible. Multi-select answers

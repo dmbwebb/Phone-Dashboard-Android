@@ -277,10 +277,10 @@
     <!-- Idioma -->
     <string name="settings_language">Idioma</string>
 
-    <!-- Chequeo diario nocturno -->
+    <!-- Chequeo programado -->
     <string name="survey_note_message">¿Tienes un momento? Toca para responder unas preguntas rápidas.</string>
-    <string name="survey_note_channel_name">Chequeo diario</string>
-    <string name="survey_note_channel_description">Preguntas nocturnas sobre tu día.</string>
+    <string name="survey_note_channel_name">Chequeo</string>
+    <string name="survey_note_channel_description">Preguntas sobre tu día.</string>
     <string name="survey_hint_single">Elige una opción</string>
     <string name="survey_hint_multi">Selecciona todas las que apliquen</string>
     <string name="survey_action_continue">Continuar</string>

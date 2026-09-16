@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
+import com.audacious_software.phone_dashboard.AppApplication;
 import com.audacious_software.phone_dashboard.R;
 import com.audacious_software.phone_dashboard.SurveyActivity;
 import com.audacious_software.phone_dashboard.SurveyAlarmReceiver;
@@ -23,15 +24,15 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 /**
- * Owns the nightly survey schedule and notification. The trigger uses the same
+ * Owns the twice-weekly survey schedule and notification. The trigger uses the same
  * robust primitive the project standardised on for DailyUsageAggregateGenerator:
  * an inexact {@code setAndAllowWhileIdle(RTC_WAKEUP, ...)} alarm anchored to an
  * absolute wall-clock time in America/Bogota and re-armed after every fire (and
- * on boot / app start). ±15 min slack is fine for a daily survey.
+ * on boot / app start). Some delivery slack is fine for this check-in.
  */
 public final class SurveyScheduler {
     private static final String TIMEZONE = "America/Bogota";
-    private static final int PROMPT_HOUR_LOCAL = 20; // 8:00 PM Bogota
+    private static final int PROMPT_HOUR_LOCAL = 18; // 6:00 PM Bogota
     private static final int PROMPT_MINUTE_LOCAL = 0;
 
     private static final int ALARM_REQUEST_CODE = 0x5C0FF;
@@ -49,6 +50,15 @@ public final class SurveyScheduler {
     public static void schedule(Context context) {
         Context app = context.getApplicationContext();
         AlarmManager alarmManager = (AlarmManager) app.getSystemService(Context.ALARM_SERVICE);
+
+        if (!shouldPrompt(app)) {
+            SurveyScheduler.cancelNotification(app);
+            if (alarmManager != null) {
+                alarmManager.cancel(alarmIntent(app));
+            }
+            return;
+        }
+
         if (alarmManager == null) {
             return;
         }
@@ -67,20 +77,39 @@ public final class SurveyScheduler {
     }
 
     static long nextTriggerMillis() {
+        return nextTriggerMillis(System.currentTimeMillis());
+    }
+
+    static long nextTriggerMillis(long nowMillis) {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(SurveyScheduler.TIMEZONE));
+        cal.setTimeInMillis(nowMillis);
         cal.set(Calendar.HOUR_OF_DAY, SurveyScheduler.PROMPT_HOUR_LOCAL);
         cal.set(Calendar.MINUTE, SurveyScheduler.PROMPT_MINUTE_LOCAL);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        if (cal.getTimeInMillis() <= System.currentTimeMillis()) {
+
+        for (int daysChecked = 0; daysChecked <= 7; daysChecked++) {
+            int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+            boolean promptDay = dayOfWeek == Calendar.WEDNESDAY || dayOfWeek == Calendar.SUNDAY;
+
+            if (promptDay && cal.getTimeInMillis() > nowMillis) {
+                return cal.getTimeInMillis();
+            }
+
             cal.add(Calendar.DATE, 1);
         }
-        return cal.getTimeInMillis();
+
+        throw new IllegalStateException("Unable to find the next survey prompt");
     }
 
     /** Post the survey notification. Tapping it opens {@link SurveyActivity}. */
     public static void postNotification(Context context) {
         Context app = context.getApplicationContext();
+
+        if (!shouldPrompt(app) || !isPromptDay(System.currentTimeMillis())) {
+            return;
+        }
+
         SurveyScheduler.ensureChannel(app);
 
         long promptShownAt = System.currentTimeMillis();
@@ -114,12 +143,31 @@ public final class SurveyScheduler {
         NotificationManagerCompat.from(context.getApplicationContext()).cancel(SurveyScheduler.NOTIFICATION_ID);
     }
 
+    static boolean shouldPromptForRole(String role) {
+        return role == null || AppApplication.ROLE_CHILD.equals(role);
+    }
+
+    private static boolean shouldPrompt(Context context) {
+        if (!(context instanceof AppApplication)) {
+            return true;
+        }
+
+        return shouldPromptForRole(((AppApplication) context).getRole());
+    }
+
+    static boolean isPromptDay(long timestamp) {
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(SurveyScheduler.TIMEZONE));
+        cal.setTimeInMillis(timestamp);
+        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+        return dayOfWeek == Calendar.WEDNESDAY || dayOfWeek == Calendar.SUNDAY;
+    }
+
     private static void ensureChannel(Context app) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return;
         }
         NotificationManager manager = (NotificationManager) app.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (manager == null || manager.getNotificationChannel(SurveyScheduler.NOTIFICATION_CHANNEL_ID) != null) {
+        if (manager == null) {
             return;
         }
         NotificationChannel channel = new NotificationChannel(

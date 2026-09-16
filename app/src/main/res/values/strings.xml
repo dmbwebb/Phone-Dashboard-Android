@@ -333,11 +333,11 @@
         <item>es</item>
     </string-array>
 
-    <!-- Nightly survey -->
+    <!-- Scheduled survey -->
     <string name="survey_note_title">Mi Ritmo Digital</string>
     <string name="survey_note_message">Got a minute? Tap to answer a few quick questions.</string>
-    <string name="survey_note_channel_name">Daily check-in</string>
-    <string name="survey_note_channel_description">Nightly questions about your day.</string>
+    <string name="survey_note_channel_name">Check-in</string>
+    <string name="survey_note_channel_description">Questions about your day.</string>
     <string name="survey_progress_format" translatable="false">%1$d / %2$d</string>
     <string name="survey_hint_single">Choose one</string>
     <string name="survey_hint_multi">Select all that apply</string>

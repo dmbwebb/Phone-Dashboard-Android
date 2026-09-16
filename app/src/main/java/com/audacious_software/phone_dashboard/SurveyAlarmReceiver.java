@@ -8,8 +8,8 @@ import android.content.Intent;
 import com.audacious_software.phone_dashboard.survey.SurveyScheduler;
 
 /**
- * Fires when the nightly survey alarm goes off: surfaces the notification and
- * immediately re-arms the alarm for the following night. Posting a notification
+ * Fires when the survey alarm goes off: surfaces the notification and
+ * immediately re-arms the alarm for the next scheduled day. Posting a notification
  * is fast enough to complete inside the receiver window, so no goAsync() is
  * needed.
  */

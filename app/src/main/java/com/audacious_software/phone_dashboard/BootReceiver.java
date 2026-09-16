@@ -12,7 +12,7 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Schedule.getInstance(context).updateSchedule(true, null, false);
 
-        // Alarms do not survive reboot; re-arm the nightly survey.
+        // Re-arm after reboot or app replacement so old schedules cannot linger.
         SurveyScheduler.schedule(context);
     }
 }

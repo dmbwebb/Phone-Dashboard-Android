@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * v1 nightly survey: a fixed four-question experience-sampling questionnaire —
+ * v1 scheduled survey: a fixed four-question experience-sampling questionnaire —
  * phone activity, current affect (multi-select), sleep, and in-person social
  * time. Copy lives in string resources so translation stays in the normal
  * Android pipeline; the survey id is versioned so a wording change is
