@@ -294,8 +294,8 @@ public class SettingsActivity extends AppCompatActivity {
             } else if (AppApplication.ROLE_CHILD.equals(role)) {
                 appRole.setTitle(R.string.role_label_child);
             } else {
-                // Installs enrolled before the role choice existed have no stored role.
-                appRole.setVisible(false);
+                // Enrolled legacy installs are treated as children until the server says otherwise.
+                appRole.setTitle(R.string.role_label_child);
             }
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(me);

@@ -28,6 +28,7 @@ import com.audacious_software.passive_data_kit.Logger;
 import com.audacious_software.passive_data_kit.PassiveDataKitApplication;
 import com.audacious_software.passive_data_kit.generators.device.ForegroundApplication;
 import com.audacious_software.phone_dashboard.survey.SurveyScheduler;
+import com.audacious_software.phone_dashboard.survey.SurveyPolicy;
 import com.github.anrwatchdog.ANRError;
 import com.github.anrwatchdog.ANRWatchDog;
 import com.google.android.material.textfield.TextInputEditText;
@@ -168,8 +169,7 @@ public class AppApplication extends Application implements PassiveDataKitApplica
 
     public String getRole() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        return prefs.getString(AppApplication.ROLE, null);
+        return SurveyPolicy.effectiveRole(this, prefs.getString(AppApplication.ROLE, null));
     }
 
     public void setRole(String role) {
@@ -231,6 +231,8 @@ public class AppApplication extends Application implements PassiveDataKitApplica
 
                     if (config.has("identifier")) {
                         me.setIdentifier(config.getString("identifier"));
+                        // The enrollment response may already contain authoritative server policy.
+                        SurveyPolicy.apply(me, config);
                         me.setRole(role);
 
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(me);
@@ -439,7 +441,18 @@ public class AppApplication extends Application implements PassiveDataKitApplica
     }
 
     public void refreshConfiguration(boolean force, final Runnable next) {
+        this.refreshConfiguration(force, next, true, false);
+    }
+
+    /** Background refresh used by survey alarms: silent, with completion on failure for offline fallback. */
+    public void refreshSurveyPolicy(final Runnable completion) {
+        this.refreshConfiguration(true, completion, false, true);
+    }
+
+    private void refreshConfiguration(boolean force, final Runnable next,
+                                      final boolean showFailureToast, final boolean completeOnFailure) {
         if (this.getIdentifier() == null) {
+            if (completeOnFailure && next != null) next.run();
             return;
         }
 
@@ -480,7 +493,7 @@ public class AppApplication extends Application implements PassiveDataKitApplica
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    if (next != null) {
+                    if (showFailureToast && next != null) {
                         Handler handler = new Handler(Looper.getMainLooper());
 
                         handler.post(new Runnable() {
@@ -492,12 +505,18 @@ public class AppApplication extends Application implements PassiveDataKitApplica
                     }
 
                     Logger.getInstance(me).log("config_fetch_failed", new HashMap<>());
+                    if (completeOnFailure && next != null) {
+                        new Handler(Looper.getMainLooper()).post(next);
+                    }
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.body() == null) {
                         Logger.getInstance(me).log("config_fetch_failed", new HashMap<>());
+                        if (completeOnFailure && next != null) {
+                            new Handler(Looper.getMainLooper()).post(next);
+                        }
                         return;
                     }
 
@@ -513,6 +532,9 @@ public class AppApplication extends Application implements PassiveDataKitApplica
 
                             Schedule.getInstance(me).setUserId(me.getIdentifier(), true);
                         }
+
+                        SurveyPolicy.apply(me, config);
+                        SurveyScheduler.schedule(me);
 
                         if (config.has("receives_subsidy")) {
                             me.setReceivesSubsidy(config.getBoolean("receives_subsidy"));
@@ -672,7 +694,7 @@ public class AppApplication extends Application implements PassiveDataKitApplica
                         e.printStackTrace();
                     }
 
-                    if (next != null) {
+                    if (showFailureToast && next != null) {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -680,8 +702,13 @@ public class AppApplication extends Application implements PassiveDataKitApplica
                             }
                         });
                     }
+                    if (completeOnFailure && next != null) {
+                        handler.post(next);
+                    }
                 }
             });
+        } else if (next != null) {
+            next.run();
         }
     }
 

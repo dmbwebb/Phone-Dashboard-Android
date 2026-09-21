@@ -62,7 +62,12 @@ public final class SurveyScheduler {
         if (alarmManager == null) {
             return;
         }
-        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextTriggerMillis(), alarmIntent(app));
+        long trigger = nextTriggerMillis();
+        if (!SurveyPolicy.allows(app, trigger)) {
+            alarmManager.cancel(alarmIntent(app));
+            return;
+        }
+        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, trigger, alarmIntent(app));
     }
 
     private static PendingIntent alarmIntent(Context app) {
@@ -147,12 +152,13 @@ public final class SurveyScheduler {
         return role == null || AppApplication.ROLE_CHILD.equals(role);
     }
 
-    private static boolean shouldPrompt(Context context) {
-        if (!(context instanceof AppApplication)) {
-            return true;
-        }
-
-        return shouldPromptForRole(((AppApplication) context).getRole());
+    public static boolean shouldPrompt(Context context) {
+        Context app = context.getApplicationContext();
+        if (!(app instanceof AppApplication)) return false;
+        AppApplication application = (AppApplication) app;
+        return application.getIdentifier() != null
+                && shouldPromptForRole(application.getRole())
+                && SurveyPolicy.allows(app, System.currentTimeMillis());
     }
 
     static boolean isPromptDay(long timestamp) {

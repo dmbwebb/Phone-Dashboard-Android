@@ -93,6 +93,13 @@ public class SurveyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // A notification can outlive a server policy change or its cutoff.
+        if (!SurveyScheduler.shouldPrompt(this)) {
+            SurveyScheduler.cancelNotification(this);
+            finish();
+            return;
+        }
         this.setContentView(R.layout.activity_survey);
 
         this.mEngine = SurveyEngines.forContext(this);
@@ -137,7 +144,18 @@ public class SurveyActivity extends AppCompatActivity {
 
         // The activity may never come back (participant went home, system reclaimed
         // it) — keep whatever has been answered so far.
-        this.flushAnswers();
+        if (this.mSurvey != null && SurveyScheduler.shouldPrompt(this)) {
+            this.flushAnswers();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!SurveyScheduler.shouldPrompt(this)) {
+            SurveyScheduler.cancelNotification(this);
+            finish();
+        }
     }
 
     private void renderQuestion(int index) {
@@ -426,6 +444,7 @@ public class SurveyActivity extends AppCompatActivity {
 
     /** Emit a data point for every buffered answer that hasn't been sent yet. */
     private void flushAnswers() {
+        if (this.mSurvey == null || !SurveyScheduler.shouldPrompt(this)) return;
         for (int i = 0; i < this.mSurvey.size(); i++) {
             Answer answer = this.mAnswers.get(i);
 
@@ -448,6 +467,10 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
     private void finishSurvey() {
+        if (!SurveyScheduler.shouldPrompt(this)) {
+            this.finish();
+            return;
+        }
         this.mFinished = true;
         this.flushAnswers();
         Toast.makeText(this, R.string.survey_thanks, Toast.LENGTH_SHORT).show();
@@ -455,7 +478,7 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
     private void skipSurvey() {
-        if (!this.mFinished) {
+        if (!this.mFinished && this.mSurvey != null && SurveyScheduler.shouldPrompt(this)) {
             this.mFinished = true;
             this.flushAnswers();
             DailySurveyGenerator.getInstance(this).saveDismissed(
