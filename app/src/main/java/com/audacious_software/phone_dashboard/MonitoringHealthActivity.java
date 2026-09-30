@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -18,6 +19,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.audacious_software.passive_data_kit.generators.Generators;
 import com.audacious_software.passive_data_kit.generators.device.UsageStatsGenerator;
@@ -42,7 +49,9 @@ public class MonitoringHealthActivity extends AppCompatActivity {
     };
 
     @Override public void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setTitle(R.string.monitoring_title);
         LinearLayout content = new LinearLayout(this);
         content.setOrientation(LinearLayout.VERTICAL);
@@ -73,7 +82,27 @@ public class MonitoringHealthActivity extends AppCompatActivity {
         content.addView(guidance);
         ScrollView scroll = new ScrollView(this);
         scroll.addView(content);
-        setContentView(scroll);
+        // Keep the app bar in the layout so it cannot cover the first status rows.
+        // Android 15+ enforces edge-to-edge; the root owns system-bar/cutout insets.
+        LinearLayout root = new LinearLayout(this);
+        root.setOrientation(LinearLayout.VERTICAL);
+        Toolbar toolbar = new Toolbar(this);
+        toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.textOnPrimary));
+        TypedValue actionBarSize = new TypedValue();
+        getTheme().resolveAttribute(androidx.appcompat.R.attr.actionBarSize, actionBarSize, true);
+        int toolbarHeight = TypedValue.complexToDimensionPixelSize(actionBarSize.data, getResources().getDisplayMetrics());
+        root.addView(toolbar, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, toolbarHeight));
+        root.addView(scroll, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1));
+        ViewCompat.setOnApplyWindowInsetsListener(root, (view, windowInsets) -> {
+            Insets bars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()
+                    | WindowInsetsCompat.Type.displayCutout());
+            view.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
+        setContentView(root);
+        setSupportActionBar(toolbar);
+        ViewCompat.requestApplyInsets(root);
     }
 
     private Button button(LinearLayout parent, int label, Runnable action) {

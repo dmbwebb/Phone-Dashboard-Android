@@ -267,6 +267,27 @@ public class ReliabilityInstrumentedTest {
         });
         try (ActivityScenario<MonitoringHealthActivity> screen = ActivityScenario.launch(MonitoringHealthActivity.class)) {
             onView(withText(containsString("Desactivado: no se puede recoger el uso"))).check(matches(isDisplayed()));
+            screen.onActivity(activity -> {
+                android.view.ViewGroup holder = activity.findViewById(android.R.id.content);
+                android.view.ViewGroup root = (android.view.ViewGroup) holder.getChildAt(0);
+                android.view.View toolbar = root.getChildAt(0);
+                android.view.View scroll = root.getChildAt(1);
+                androidx.core.view.WindowInsetsCompat windowInsets = androidx.core.view.ViewCompat.getRootWindowInsets(root);
+                assertNotNull("Real window insets must be available", windowInsets);
+                androidx.core.graphics.Insets bars = windowInsets.getInsets(
+                        androidx.core.view.WindowInsetsCompat.Type.systemBars()
+                                | androidx.core.view.WindowInsetsCompat.Type.displayCutout());
+                assertTrue("Toolbar must clear the status bar", toolbar.getTop() >= bars.top);
+                assertEquals("Scrolling content must start below toolbar", toolbar.getBottom(), scroll.getTop());
+                assertTrue("Content must clear bottom navigation", scroll.getBottom() <= root.getHeight() - bars.bottom);
+                assertTrue("Toolbar must have visible height", toolbar.getHeight() > 0);
+            });
+            Bitmap topScreenshot = InstrumentationRegistry.getInstrumentation().getUiAutomation().takeScreenshot();
+            assertNotNull("Health-screen top screenshot", topScreenshot);
+            try (FileOutputStream output = new FileOutputStream(new File(context().getExternalCacheDir(), "e2e-health-es-top.png"))) {
+                assertTrue(topScreenshot.compress(Bitmap.CompressFormat.PNG, 100, output));
+            }
+            topScreenshot.recycle();
             onView(withText("Revisar acceso a datos de uso")).perform(scrollTo()).check(matches(isDisplayed()));
             Bitmap screenshot = InstrumentationRegistry.getInstrumentation().getUiAutomation().takeScreenshot();
             assertNotNull("Health-screen screenshot", screenshot);
