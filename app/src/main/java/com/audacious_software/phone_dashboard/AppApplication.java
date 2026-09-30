@@ -130,7 +130,7 @@ public class AppApplication extends Application implements PassiveDataKitApplica
         thread.start();
 
         FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
-        crashlytics.setCrashlyticsCollectionEnabled(true);
+        crashlytics.setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG);
 
         String identifier = this.getIdentifier();
 
@@ -144,6 +144,8 @@ public class AppApplication extends Application implements PassiveDataKitApplica
                 Logger.getInstance(me).logThrowable(error);
             }
         }).start();
+
+        if (identifier != null) Schedule.getInstance(this).resumeMonitoring();
 
         // Arm the scheduled survey; setAndAllowWhileIdle is idempotent, so re-arming
         // on every launch is a cheap safety net if an alarm was dropped.
@@ -159,6 +161,10 @@ public class AppApplication extends Application implements PassiveDataKitApplica
     public void setIdentifier(String identifier) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor e = prefs.edit();
+        String priorIdentifier = this.getIdentifier();
+        if (priorIdentifier != null && !priorIdentifier.equals(identifier)) {
+            e.remove(Schedule.SAVED_CONFIGURATION);
+        }
         e.putString(AppApplication.IDENTIFIER, identifier);
         e.apply();
 
@@ -179,6 +185,7 @@ public class AppApplication extends Application implements PassiveDataKitApplica
         e.apply();
 
         SurveyScheduler.schedule(this);
+        if (this.getIdentifier() != null) Schedule.getInstance(this).resumeMonitoring();
     }
 
     public void enrollEmail(final String email, final String role, final Runnable success, final Runnable failure) {
@@ -235,10 +242,8 @@ public class AppApplication extends Application implements PassiveDataKitApplica
                         SurveyPolicy.apply(me, config);
                         me.setRole(role);
 
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(me);
-                        SharedPreferences.Editor e = prefs.edit();
-                        e.putString(Schedule.SAVED_CONFIGURATION, config.toString(2));
-                        e.apply();
+                        // Enrollment returns an identity, not a monitoring configuration.
+                        // Never overwrite a valid offline cache with this response.
 
                         if (success != null) {
                             success.run();
@@ -1108,6 +1113,11 @@ public class AppApplication extends Application implements PassiveDataKitApplica
                 AppLogger.getInstance(me).log("phone-dashboard-remote-notification-update");
             }
         }, false);
+    }
+
+    @Override
+    public void resumeMonitoring() {
+        Schedule.getInstance(this).resumeMonitoring();
     }
 
     public int fetchPriority(String packageName) {

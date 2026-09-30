@@ -11,4 +11,7 @@
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item android:id="@+id/action_monitoring_health"
+        android:title="@string/monitoring_title"
+        app:showAsAction="never" />
 </menu>

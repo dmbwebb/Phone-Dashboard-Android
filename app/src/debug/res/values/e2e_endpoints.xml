@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Debug builds use the local emulator test sink via adb reverse. -->
+    <string name="url_phone_dashboard_configuration">http://127.0.0.1:8765/config</string>
+    <string name="url_phone_study_configuration">http://127.0.0.1:8765/study</string>
+    <string name="url_phone_enroll">http://127.0.0.1:8765/enroll</string>
+</resources>

@@ -136,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
         final AppApplication app = (AppApplication) this.getApplication();
 
         app.clearCachedBudgets();
+        Schedule.getInstance(this).resumeMonitoring();
+        com.audacious_software.passive_data_kit.PassiveDataKit.getInstance(this).initializeNotifications();
 
         if (OnboardingActivity.requiresOnboarding(app)) {
             Log.e("PHONE DASHBOARD", "STARTING ONBOARDING");
@@ -215,6 +217,8 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             Intent settings = new Intent(this, SettingsActivity.class);
             this.startActivity(settings);
+        } else if (id == R.id.action_monitoring_health) {
+            this.startActivity(new Intent(this, MonitoringHealthActivity.class));
         } else if (id == R.id.action_budget) {
             Intent budget = new Intent(this, EditBudgetActivity.class);
             this.startActivity(budget);

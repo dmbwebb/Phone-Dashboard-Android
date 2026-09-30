@@ -15,6 +15,7 @@
         <!-- <androidx.preference.Preference app:title="@string/action_upload_data" app:summary="@string/summary_upload_data" app:key="com.audacious_software.phone_dashboard.SettingsActivity.UPLOAD_DATA" /> -->
     </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory app:title="@string/settings_app_info">
+        <androidx.preference.Preference app:title="@string/monitoring_title" app:key="monitoring_health" />
         <androidx.preference.Preference app:title="@string/placeholder_app_version" app:summary="@string/label_app_version" app:key="com.audacious_software.phone_dashboard.SettingsActivity.APP_VERSION" />
         <androidx.preference.Preference app:title="@string/settings_irb_number" app:summary="@string/settings_irb_summary" />
     </androidx.preference.PreferenceCategory>

@@ -22,4 +22,27 @@ In the `app/src/main/res/values/strings.xml` file in that same folder, configure
 
 Once these steps are complete, you should be able to build a debug version for testing on a physical device. If you seek to distribute the application on the Google Play Store, you will need [an Android keystore](https://developer.android.com/studio/publish/app-signing) set up for signing. If you do this, update the `gradle.properties` file accordingly.
 
+## Collection reliability tests
+
+Run the JVM regression suite and build the signed production bundle with:
+
+```sh
+./gradlew :app:testReleaseUnitTest :app:bundleRelease
+```
+
+The emulator suite uses real Android usage statistics, a synthetic study ID, and a local HTTP receiver. Debug resources point configuration and enrollment at that receiver; release resources retain the production endpoints. Debug analytics and crash reporting are disabled.
+
+```sh
+./gradlew -PreliabilityE2E=true :app:assembleDebug :app:assembleDebugAndroidTest
+python3 tools/reliability_emulator_e2e.py \
+  --avd MRD_API34_Reliability --serial emulator-5580 \
+  --output /private/tmp/mrd-reliability-e2e/api34
+```
+
+Create the named AVD in the local Android SDK first. The script expects the SDK at `~/Library/Android/sdk`, starts its own headless emulator, and refuses an occupied serial unless `--existing` is explicitly supplied. Use dedicated test AVDs: the suite clears app data, changes usage permission and battery settings, kills the app process, and reboots the emulator. Port 8765 must be available. Run different AVDs sequentially because they share the local receiver.
+
+The suite checks actual usage collection and HTTP receipt, permission removal and restoration, HTTP 503, disconnected sockets, a real response timeout, concurrent uploaders, database migration without historical replay, durable records across process death and reboot, cached configuration, automatic restart with a persisted retry delay, Doze recovery, and the Spanish permission-repair screen. It saves device metadata, test output, received synthetic records, lifecycle evidence, logs, and a screenshot beneath the output directory.
+
+The Doze test explicitly expedites the persisted Android job after leaving idle; it does not establish natural scheduling latency. Emulator tests do not validate manufacturer-specific battery managers or production HTTPS. A successful server acknowledgement establishes bundle receipt, not completeness of every study day. Delivery is at least once: interruption between durable queue publication and database acknowledgement can repeat a logical daily record, so downstream analysis must retain its existing per-day, per-package deduplication.
+
 *Please send any updates, corrections, or questions to [chris@audacious-software.com](mailto:chris@audacious-software.com). This is an early iteration of this document and it is expected to change over time.*
