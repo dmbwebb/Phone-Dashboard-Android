@@ -84,14 +84,18 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
 
     private Context mContext = null;
     private List<Transmitter> mTransmitters = new ArrayList<>();
-    private boolean mFetchingConfig = false;
+    private String mActiveTransmitterConfiguration = null;
+    private String mAppliedConfiguration = null;
+    private static final String CONFIGURATION_CHECKED = "monitoring_configuration_checked";
+    private static final String CONFIGURATION_ERROR = "monitoring_configuration_error";
+    private static final String CONFIGURATION_IDENTITY = "monitoring_configuration_identity";
 
     private Handler mUsageHandler = null;
     private HandlerThread mHandlerThread = null;
 
     private long mCurrentDayStart = 0;
 
-    public static Schedule getInstance(Context context) {
+    public static synchronized Schedule getInstance(Context context) {
         if (Schedule.sInstance == null) {
             Schedule.sInstance = new Schedule(context.getApplicationContext());
         }
@@ -307,7 +311,8 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
         }
     }
 
-    private void start(final String userId) {
+    private synchronized void start(final String userId) {
+        if (userId == null || !userId.equals(this.mApplication.getIdentifier())) return;
         PassiveDataKit pdkInstance = PassiveDataKit.getInstance(this.mContext);
 
         pdkInstance.setAlwaysNotify(true);
@@ -320,21 +325,34 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.mContext);
 
         try {
-            JSONObject config = new JSONObject(prefs.getString(Schedule.SAVED_CONFIGURATION, null));
+            JSONObject config = MonitoringConfiguration.parse(prefs.getString(Schedule.SAVED_CONFIGURATION, null));
+            String cachedIdentity = prefs.getString(CONFIGURATION_IDENTITY, userId);
+            if (!userId.equals(cachedIdentity)) return;
+            String transmitterConfiguration = userId + ":" + config.getJSONArray("transmitters").toString();
 
             synchronized (this.mTransmitters) {
-                this.mTransmitters.addAll(pdkInstance.fetchTransmitters(userId, this.mContext.getString(R.string.app_name), config));
-
-                for (Transmitter transmitter : this.mTransmitters) {
-                    if (transmitter instanceof HttpTransmitter) {
-                        HttpTransmitter httpTransmitter = (HttpTransmitter) transmitter;
-
-                        httpTransmitter.setMaxBundleSize(32);
+                if (!transmitterConfiguration.equals(this.mActiveTransmitterConfiguration)) {
+                    for (Transmitter transmitter : this.mTransmitters) {
+                        if (transmitter instanceof HttpTransmitter) {
+                            ((HttpTransmitter) transmitter).deinitialize(this.mContext);
+                        }
+                    }
+                    this.mTransmitters.clear();
+                    this.mTransmitters.addAll(pdkInstance.fetchTransmitters(userId, this.mContext.getString(R.string.app_name), config));
+                    for (Transmitter transmitter : this.mTransmitters) {
+                        if (transmitter instanceof HttpTransmitter) ((HttpTransmitter) transmitter).setMaxBundleSize(32);
+                    }
+                    if (!this.mTransmitters.isEmpty()) {
+                        this.mActiveTransmitterConfiguration = transmitterConfiguration;
                     }
                 }
+
             }
 
-            pdkInstance.updateGenerators(config);
+            if (!config.toString().equals(this.mAppliedConfiguration)) {
+                pdkInstance.updateGenerators(config);
+                this.mAppliedConfiguration = config.toString();
+            }
 
             AppEvent.getInstance(this.mContext).setCachedDataRetentionPeriod(2 * 7 * 24 * 60 * 60 * 1000);
             Battery.getInstance(this.mContext).setCachedDataRetentionPeriod(2 * 7 * 24 * 60 * 60 * 1000);
@@ -348,86 +366,144 @@ public class Schedule implements Generators.GeneratorUpdatedListener {
             // pdkInstance.transmitTokens(); // Disabled - no valid Firebase config
 
             Generators.getInstance(this.mContext).addNewGeneratorUpdatedListener(this);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException | RuntimeException e) {
+            Log.e(AppApplication.TAG, "Monitoring could not initialize", e);
+            prefs.edit().putString(CONFIGURATION_ERROR, e.getClass().getSimpleName()).apply();
         }
-
-        Intent fireIntent = new Intent(KeepAliveService.ACTION_KEEP_ALIVE, null, this.mContext, KeepAliveService.class);
-
-        KeepAliveService.enqueueWork(this.mContext, KeepAliveService.class, KeepAliveService.JOB_ID, fireIntent);
     }
 
-        public void setUserId(final String userId) {
-            this.setUserId(userId, false);
+    public void setUserId(final String userId) {
+        this.setUserId(userId, false);
+    }
+
+    public void setUserId(final String userId, boolean refresh) {
+        if (userId == null) return;
+        // All startup entry points share this queue and the synchronized initializer.
+        // Cached collection does not wait for connectivity or a server response.
+        this.mUsageHandler.post(() -> this.start(userId));
+        MonitoringJobService.schedulePeriodic(this.mContext);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.mContext);
+        if (refresh || System.currentTimeMillis() - prefs.getLong(CONFIGURATION_CHECKED, 0) > 3600000L) {
+            MonitoringJobService.scheduleNow(this.mContext);
         }
+    }
 
-        public void setUserId(final String userId, boolean skipInitialization) {
-        final Schedule me = this;
+    public void resumeMonitoring() {
+        this.setUserId(this.mApplication.getIdentifier());
+    }
 
-        if (userId != null && this.mFetchingConfig == false && (this.mTransmitters.size() == 0 || skipInitialization)) {
-            this.mFetchingConfig = true;
+    /** Runs on a JobService worker; the job owns the network operation until completion. */
+    boolean refreshMonitoringConfiguration() {
+        return refreshMonitoringConfiguration(() -> true, call -> { });
+    }
 
-            OkHttpClient client = new OkHttpClient();
+    boolean refreshMonitoringConfiguration(java.util.function.BooleanSupplier active,
+                                           java.util.function.Consumer<Call> registerCall) {
+        if (!active.getAsBoolean()) return false;
+        String userId = this.mApplication.getIdentifier();
+        if (userId == null) return true;
+        this.start(userId);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.mContext);
+        try {
+            HttpUrl baseUrl = HttpUrl.parse(this.mContext.getString(R.string.url_phone_dashboard_configuration));
+            if (baseUrl == null) throw new IOException("Invalid configuration endpoint");
+            HttpUrl url = baseUrl.newBuilder().addQueryParameter("id", userId)
+                    .addQueryParameter("context", this.mContext.getPackageName()).build();
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .callTimeout(30, java.util.concurrent.TimeUnit.SECONDS).build();
+            Call call = client.newCall(new Request.Builder().url(url).build());
+            registerCall.accept(call);
+            if (!active.getAsBoolean()) call.cancel();
+            try (Response response = call.execute()) {
+                if (!response.isSuccessful() || response.body() == null) {
+                    throw new IOException("Configuration HTTP " + response.code());
+                }
+                JSONObject config = MonitoringConfiguration.parse(response.body().string());
+                synchronized (this) {
+                    if (!active.getAsBoolean()) return false;
+                    // A response for a previous enrollment must not replace the new identity's cache.
+                    if (!userId.equals(this.mApplication.getIdentifier())) return false;
+                    if (!prefs.edit().putString(SAVED_CONFIGURATION, config.toString())
+                            .putString(CONFIGURATION_IDENTITY, userId)
+                            .putLong(CONFIGURATION_CHECKED, System.currentTimeMillis())
+                            .remove(CONFIGURATION_ERROR).commit()) {
+                        throw new IOException("Could not persist monitoring configuration");
+                    }
+                    this.start(userId);
+                }
+                return true;
+            }
+        } catch (IOException | JSONException | RuntimeException error) {
+            Log.w(AppApplication.TAG, "Configuration refresh failed; retaining working cache", error);
+            prefs.edit().putString(CONFIGURATION_ERROR, error.getClass().getSimpleName()).apply();
+            return false;
+        }
+    }
 
-            HttpUrl baseUrl = HttpUrl.parse(me.mContext.getString(R.string.url_phone_dashboard_configuration));
+    public boolean hasValidConfiguration() {
+        try {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.mContext);
+            MonitoringConfiguration.parse(prefs.getString(SAVED_CONFIGURATION, null));
+            return this.mApplication.getIdentifier() != null && this.mApplication.getIdentifier().equals(
+                    prefs.getString(CONFIGURATION_IDENTITY, this.mApplication.getIdentifier()));
+        } catch (JSONException error) {
+            return false;
+        }
+    }
 
-            HttpUrl url = new HttpUrl.Builder()
-                    .scheme(baseUrl.scheme())
-                    .host(baseUrl.host())
-                    .port(baseUrl.port())
-                    .encodedPath(baseUrl.encodedPath())
-                    .addQueryParameter("id", userId)
-                    .addQueryParameter("context", this.mContext.getPackageName())
-                    .build();
+    public void checkAndSync(Runnable completion) {
+        this.resumeMonitoring();
+        this.mUsageHandler.post(() -> {
+            try {
+                if (this.mApplication.getIdentifier() != null && this.hasValidConfiguration()) {
+                    com.audacious_software.passive_data_kit.generators.device.DailyUsageAggregateGenerator
+                            .getInstance(this.mContext).runAggregation();
+                    this.transmitData();
+                }
+            } catch (RuntimeException error) {
+                Log.e(AppApplication.TAG, "Manual collection failed", error);
+            } finally {
+                if (completion != null) new Handler(Looper.getMainLooper()).post(completion);
+            }
+        });
+        MonitoringJobService.scheduleNow(this.mContext);
+    }
 
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    me.mFetchingConfig = false;
-
-                    if (skipInitialization == false) {
-                        me.start(userId);
+    void runScheduledWork(java.util.function.BooleanSupplier active, Runnable completion) {
+        this.mUsageHandler.post(() -> {
+            try {
+                if (!active.getAsBoolean()) return;
+                this.start(this.mApplication.getIdentifier());
+                if (!this.hasValidConfiguration()) {
+                    completion.run();
+                    return;
+                }
+                if (!active.getAsBoolean()) return;
+                com.audacious_software.passive_data_kit.generators.device.DailyUsageAggregateGenerator
+                        .getInstance(this.mContext).runAggregation();
+                List<HttpTransmitter> transmitters = new ArrayList<>();
+                synchronized (this.mTransmitters) {
+                    for (Transmitter transmitter : this.mTransmitters) {
+                        if (transmitter instanceof HttpTransmitter) transmitters.add((HttpTransmitter) transmitter);
                     }
                 }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    try {
-                        me.mFetchingConfig = false;
-
-                        if (response.body() == null) {
-                            if (skipInitialization == false) {
-                                me.start(userId);
-                            }
-                            return;
-                        }
-
-                        String body = response.body().string();
-
-                        JSONObject config = new JSONObject(body);
-
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(me.mContext);
-                        SharedPreferences.Editor e = prefs.edit();
-                        e.putString(Schedule.SAVED_CONFIGURATION, config.toString(2));
-                        e.apply();
-
-                        PassiveDataKit.getInstance(me.mContext).updateGenerators(config);
-
-                        if (skipInitialization == false) {
-                            me.start(userId);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                if (transmitters.isEmpty()) {
+                    completion.run();
+                    return;
                 }
-            });
-
-            AppLogger.getInstance(me.mContext).log("schedule_inited");
-        }
+                java.util.concurrent.atomic.AtomicInteger remaining =
+                        new java.util.concurrent.atomic.AtomicInteger(transmitters.size());
+                for (HttpTransmitter transmitter : transmitters) {
+                    if (!active.getAsBoolean()) return;
+                    transmitter.transmitWithCompletion(false, () -> {
+                        if (remaining.decrementAndGet() == 0) completion.run();
+                    });
+                }
+            } catch (RuntimeException error) {
+                Log.e(AppApplication.TAG, "Scheduled monitoring failed", error);
+                completion.run();
+            }
+        });
     }
 
     @Override

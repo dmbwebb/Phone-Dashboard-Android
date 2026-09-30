@@ -108,6 +108,10 @@ public class SettingsActivity extends AppCompatActivity {
             final AppApplication app = (AppApplication) me.getApplication();
 
             String key = preference.getKey();
+            if ("monitoring_health".equals(key)) {
+                me.startActivity(new Intent(me, MonitoringHealthActivity.class));
+                return true;
+            }
 
             if (SettingsActivity.UPLOAD_DATA.equals(key) || SettingsActivity.TRANSMIT_DATA.equals(key)) {
                 AppLogger.getInstance(me).log("settings_transmit_data");

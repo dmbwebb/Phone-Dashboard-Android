@@ -11,9 +11,11 @@ android {
         applicationId project.findProperty("releaseApplicationId") ?: "com.miritmodigital.app"
         minSdkVersion 24
         targetSdk 36
-        versionCode 107
-        versionName "107"
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        versionCode 108
+        versionName "108"
+        testInstrumentationRunner project.hasProperty('reliabilityE2E')
+                ? 'com.audacious_software.phone_dashboard.ReliabilityTestRunner'
+                : 'androidx.test.runner.AndroidJUnitRunner'
         manifestPlaceholders = [
                 appAuthRedirectScheme: "NOT-USED"
         ]
@@ -81,6 +83,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.preference:preference:1.2.1'
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'com.fasterxml.jackson.core:jackson-core:2.11.3'
     testImplementation 'org.mockito:mockito-core:5.23.0'
     testImplementation 'org.robolectric:robolectric:4.16.1'
     androidTestImplementation 'androidx.test:core:1.5.0'

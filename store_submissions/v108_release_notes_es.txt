@@ -1,0 +1,1 @@
+Mejoras en la recuperación de envíos pendientes después de cierres o reinicios. Nueva opción «Revisar y sincronizar» para comprobar permisos y el estado del envío de datos. Correcciones de compatibilidad con Android 7.

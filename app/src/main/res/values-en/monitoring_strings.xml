@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="monitoring_title">Check and sync</string>
+    <string name="monitoring_usage_action">Check Usage access</string>
+    <string name="monitoring_battery_action">Check battery settings</string>
+    <string name="monitoring_checking">Checking saved data…</string>
+    <string name="monitoring_requested">Check finished. Upload will be attempted with a connection. Check the last server receipt below.</string>
+    <string name="monitoring_guidance">Enable Usage access for Mi Ritmo Digital. In battery settings, allow background activity or select Unrestricted if available. Do not clear app data or reinstall. Server receipt confirms an upload, but does not prove every day is complete.</string>
+    <string name="monitoring_not_yet">No record</string>
+    <string name="monitoring_not_enrolled">No App ID</string>
+    <string name="monitoring_allowed">Enabled</string>
+    <string name="monitoring_permission_missing">Disabled: usage cannot be collected</string>
+    <string name="monitoring_unrestricted">No restriction detected</string>
+    <string name="monitoring_battery_check">Check battery settings</string>
+    <string name="monitoring_ready">Available</string>
+    <string name="monitoring_config_missing">Pending: connection and enrollment required</string>
+    <string name="monitoring_status">App ID: %1$s\n\nUsage access: %2$s\n\nBattery: %3$s\n\nConfiguration: %4$s\n\nLast successful usage query: %5$s\n\nPending uploads: %6$d\n\nLast upload attempt: %7$s\n\nLast server receipt: %8$s</string>
+    <string name="monitoring_daily_pending">Daily records still awaiting upload preparation: %1$d</string>
+    <string name="monitoring_daily_result">Last query result: %1$s</string>
+    <string name="monitoring_last_error">Last upload problem: %1$s</string>
+    <string name="monitoring_query_collected">Usage data found</string>
+    <string name="monitoring_query_empty">Android returned no data; this does not confirm zero use</string>
+    <string name="monitoring_query_locked">Unlock the phone and check again</string>
+    <string name="monitoring_query_error">Android could not return data; the app will retry</string>
+    <string name="monitoring_query_disabled">Collection disabled in configuration</string>
+</resources>

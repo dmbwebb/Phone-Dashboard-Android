@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="monitoring_title">Revisar y sincronizar</string>
+    <string name="monitoring_usage_action">Revisar acceso a datos de uso</string>
+    <string name="monitoring_battery_action">Revisar batería</string>
+    <string name="monitoring_checking">Revisando los datos guardados…</string>
+    <string name="monitoring_requested">Revisión terminada. El envío se intentará con conexión. Revisa abajo la última recepción del servidor.</string>
+    <string name="monitoring_guidance">Activa el acceso a datos de uso para Mi Ritmo Digital. En los ajustes de batería, permite el uso en segundo plano o selecciona “Sin restricciones”, si aparece. No borres los datos ni reinstales la app. La recepción del servidor confirma un envío, pero no que todos los días estén completos.</string>
+    <string name="monitoring_not_yet">Sin registro</string>
+    <string name="monitoring_not_enrolled">Sin App ID</string>
+    <string name="monitoring_allowed">Activado</string>
+    <string name="monitoring_permission_missing">Desactivado: no se puede recoger el uso</string>
+    <string name="monitoring_unrestricted">Sin restricción detectada</string>
+    <string name="monitoring_battery_check">Revisa los ajustes de batería</string>
+    <string name="monitoring_ready">Disponible</string>
+    <string name="monitoring_config_missing">Pendiente: necesita conexión e inscripción</string>
+    <string name="monitoring_status">App ID: %1$s\n\nAcceso a datos de uso: %2$s\n\nBatería: %3$s\n\nConfiguración: %4$s\n\nÚltima consulta de uso correcta: %5$s\n\nEnvíos pendientes: %6$d\n\nÚltimo intento de envío: %7$s\n\nÚltima recepción del servidor: %8$s</string>
+    <string name="monitoring_daily_pending">Registros diarios aún por preparar para el envío: %1$d</string>
+    <string name="monitoring_daily_result">Resultado de la última consulta: %1$s</string>
+    <string name="monitoring_last_error">Último problema de envío: %1$s</string>
+    <string name="monitoring_query_collected">Se encontraron datos de uso</string>
+    <string name="monitoring_query_empty">Android no devolvió datos; esto no confirma cero uso</string>
+    <string name="monitoring_query_locked">Desbloquea el teléfono y vuelve a revisar</string>
+    <string name="monitoring_query_error">Android no pudo devolver los datos; se volverá a intentar</string>
+    <string name="monitoring_query_disabled">Recogida desactivada en la configuración</string>
+</resources>
