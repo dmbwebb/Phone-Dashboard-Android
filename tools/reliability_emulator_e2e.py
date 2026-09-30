@@ -229,10 +229,16 @@ def lifecycle_recovery(serial, output):
     if seeded.returncode:
         raise RuntimeError("Cannot stage boot fixture: " + seeded.stdout.decode(errors="replace"))
     assert json.loads(adb(serial, "shell", "run-as", PKG, "cat", "files/http-transmitter/e2e-boot-probe.json")) == [boot_record]
+    # Shell appops changes are buffered. Persist the synthetic permission grant
+    # so an abrupt adb reboot does not discard the synthetic test setup.
+    adb(serial, "shell", "appops", "write-settings")
     previous_boot = adb(serial, "shell", "cat", "/proc/sys/kernel/random/boot_id").strip()
     adb(serial, "reboot")
     time.sleep(3)
     wait_boot(serial, previous_boot)
+    permission_after_boot = adb(serial, "shell", "appops", "get", PKG, "GET_USAGE_STATS")
+    if "GET_USAGE_STATS: allow" not in permission_after_boot:
+        raise RuntimeError("Synthetic usage permission did not survive reboot: " + permission_after_boot)
     adb(serial, "reverse", "tcp:8765", "tcp:" + str(HOST_PORT))
     with Fixture.lock:
         Fixture.state.update(records=[], attempts=0, status=201)
@@ -240,6 +246,7 @@ def lifecycle_recovery(serial, output):
                    lambda: any(record.get("marker") == "boot-queued-synthetic" for record in Fixture.state["records"]), timeout=180)
     summary["boot"] = {"received_records": len(Fixture.state["records"]),
                        "known_synthetic_bundle_received_after_boot": True,
+                       "usage_permission_after_boot": permission_after_boot.strip(),
                        "pid": adb(serial, "shell", "pidof", PKG).strip(),
                        "old_boot_id": previous_boot,
                        "new_boot_id": adb(serial, "shell", "cat", "/proc/sys/kernel/random/boot_id").strip()}
