@@ -282,6 +282,9 @@ public class ReliabilityInstrumentedTest {
                 assertTrue("Content must clear bottom navigation", scroll.getBottom() <= root.getHeight() - bars.bottom);
                 assertTrue("Toolbar must have visible height", toolbar.getHeight() > 0);
             });
+            // Espresso waits for layout, but API24 may not yet have submitted
+            // the first rendered frame to the screenshot compositor.
+            SystemClock.sleep(1000);
             Bitmap topScreenshot = InstrumentationRegistry.getInstrumentation().getUiAutomation().takeScreenshot();
             assertNotNull("Health-screen top screenshot", topScreenshot);
             try (FileOutputStream output = new FileOutputStream(new File(context().getExternalCacheDir(), "e2e-health-es-top.png"))) {
