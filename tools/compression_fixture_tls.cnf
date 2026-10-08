@@ -1,0 +1,9 @@
+[req]
+distinguished_name = name
+x509_extensions = extensions
+prompt = no
+[name]
+CN = 127.0.0.1
+[extensions]
+subjectAltName = IP:127.0.0.1
+basicConstraints = critical,CA:TRUE

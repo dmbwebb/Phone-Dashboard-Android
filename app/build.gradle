@@ -11,9 +11,11 @@ android {
         applicationId project.findProperty("releaseApplicationId") ?: "com.miritmodigital.app"
         minSdkVersion 24
         targetSdk 36
-        versionCode 108
-        versionName "108"
-        testInstrumentationRunner project.hasProperty('reliabilityE2E')
+        versionCode 109
+        versionName "109"
+        testInstrumentationRunner project.hasProperty('compressionRecoveryE2E')
+                ? 'com.audacious_software.phone_dashboard.CompressionRecoveryTestRunner'
+                : project.hasProperty('reliabilityE2E')
                 ? 'com.audacious_software.phone_dashboard.ReliabilityTestRunner'
                 : 'androidx.test.runner.AndroidJUnitRunner'
         manifestPlaceholders = [
@@ -72,6 +74,12 @@ android {
         unitTests.includeAndroidResources = true
     }
 
+    if (project.hasProperty('compressionRecoveryE2E')) {
+        // Instrument the signed, minified production APK; fixture code stays in
+        // the separate test APK and never changes release resources or BuildConfig.
+        testBuildType 'release'
+    }
+
 
 }
 
@@ -86,16 +94,12 @@ dependencies {
     testImplementation 'com.fasterxml.jackson.core:jackson-core:2.11.3'
     testImplementation 'org.mockito:mockito-core:5.23.0'
     testImplementation 'org.robolectric:robolectric:4.16.1'
+    testImplementation 'androidx.test:core:1.5.0'
     androidTestImplementation 'androidx.test:core:1.5.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test:rules:1.5.0'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    implementation 'androidx.test:core:1.5.0'
-    implementation 'androidx.test.ext:junit:1.1.5'
-    implementation 'androidx.test:rules:1.5.0'
-    implementation 'androidx.test:runner:1.5.2'
-    implementation 'androidx.test.espresso:espresso-core:3.5.1'
     api 'com.google.gms:google-services:4.4.2'
 
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))

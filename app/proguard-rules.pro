@@ -44,3 +44,10 @@
 -keep class com.audacious_software.phone_dashboard.** { *; }
 -keep class org.xmlpull.v1.** { *; }
 -keep class okhttp3.Headers { *; }
+
+# JNI resolves JNA callbacks (including Native.fromNative) and Sodium bindings
+# by name. They must survive shrinking even when Java has no direct call site.
+-keep class com.sun.jna.** { *; }
+-keep class com.goterl.lazysodium.** { *; }
+# JNA also exposes desktop-only AWT helpers, which Android never calls.
+-dontwarn java.awt.**
