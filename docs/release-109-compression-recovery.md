@@ -49,11 +49,12 @@ Verified on 8 October 2026:
 
 - The default signed release APK and AAB build successfully; all 62 release JVM tests pass.
 - Android 14, API 34, arm64: the staged v108-to-v109 upgrade, gzip delivery, downloaded configuration rollback, native hash/nonce, and normal application cold start all pass.
+- Android 16, API 36, arm64 with 16,384-byte memory pages: the same staged upgrade, delivery, native cryptography and normal cold-start checks all pass.
 - The package is `com.miritmodigital.app`, version code/name `109`, with debugging disabled. Fixture classes and the synthetic identity are absent from the production DEX files.
 - The unchanged signing certificate SHA-256 is `a4f38dc9dfca09ac12f07aacfdea431f2237cfe93870e99bea2825112dbea54a`.
 
-The verified default-build AAB SHA-256 is `fd1723c5d8fcccadff64f7dad5729e734c8dadb6b6338fc2dd74e3e2464c4f27`; the APK SHA-256 is `96e30e605a83367ad634f15bddfccab5f5911c20e322847a1db2d6d20f9bba20`. Local release copies are in `~/Downloads/MRD-v109-20261008/`. Build logs and API 34 test evidence are under `/private/tmp/mrd-compression-recovery-20261008/` (`production-build.log`, `api34-run3/`).
+The verified default-build AAB SHA-256 is `fd1723c5d8fcccadff64f7dad5729e734c8dadb6b6338fc2dd74e3e2464c4f27`; the APK SHA-256 is `96e30e605a83367ad634f15bddfccab5f5911c20e322847a1db2d6d20f9bba20`. Local release copies are in `~/Downloads/MRD-v109-20261008/`. Build logs and emulator evidence are under `/private/tmp/mrd-compression-recovery-20261008/` (`production-build.log`, `api34-run3/`, `api36/`; the latter includes `page-size.txt`).
 
 ## Google Play release notes
 
-Corrige un error que podía cerrar la app e impedir el envío de datos. Permite recuperar los datos pendientes al actualizar.
+Corregimos un error que podía cerrar la app al sincronizar datos. Esta actualización mejora la estabilidad y permite reanudar el envío de los datos pendientes.
