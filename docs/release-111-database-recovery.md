@@ -1,6 +1,6 @@
 # Version 111: recover interrupted usage databases
 
-Status: the corrected candidate passes independent review, all 88 JVM tests, the signed production build and the complete Android 14 and Android 16 retained-data recovery gates. Play submission is pending root verification. Android 14 also showed a transient WebView/onboarding startup ANR, described below; Android 16 passed after two infrastructure failures were diagnosed and preserved. The first v111 candidate was rejected by its complete startup-log gate and has never been uploaded. The superseded v110 draft was withdrawn without submission. Earlier artifacts and failure evidence remain preserved.
+Status: the corrected candidate passes independent review, all 88 JVM tests, the signed production build and the complete Android 14 and Android 16 retained-data recovery gates. Submitted to Google Play on 10 October 2026 at approximately 12:44 UTC; Publishing overview confirms release 111 under "Changes in review", with Google's automated checks still running. It is not yet published. Android 14 also showed a transient WebView/onboarding startup ANR, described below; Android 16 passed after two infrastructure failures were diagnosed and preserved. The first v111 candidate was rejected by its complete startup-log gate and has never been uploaded. The superseded v110 draft was withdrawn without submission. Earlier artifacts and failure evidence remain preserved.
 
 ## What changed
 
@@ -119,7 +119,7 @@ Use a new output directory when repeating a check; the driver refuses existing d
 
 Version 111 keeps the existing recovery policy. [Raw usage-event collection](https://github.com/dmbwebb/PassiveDataKit-Android/blob/e6089b164d2756a702fbf51ae34fad9bdcd8d61b/java/src/com/audacious_software/passive_data_kit/generators/device/UsageStatsGenerator.java#L188) resumes one millisecond after the later of the latest local record and seven days before the current time. [Daily totals](https://github.com/dmbwebb/PassiveDataKit-Android/blob/e6089b164d2756a702fbf51ae34fad9bdcd8d61b/java/src/com/audacious_software/passive_data_kit/generators/device/DailyUsageAggregateGenerator.java#L57) have a default thirty-day lookback. These are query limits, not a guarantee that Android still has every observation. Already queued payloads have no age cutoff and are retained until the server acknowledges them.
 
-The 10 October 2026 private production recovery audit observed about four hours of actual raw-event backfill from one v109 phone. That establishes that recovery can occur; it does not establish recovery for the phones affected by the original interruption. At the 11:56 UTC refresh, the originally affected phone roles still had no observed v109 uploads. The private audit holds the device-level evidence; none is included here.
+The 10 October 2026 private production recovery audit observed about four hours of actual raw-event backfill from one v109 phone. That establishes that recovery can occur; it does not establish recovery for the phones affected by the original interruption. At the final 12:42 UTC refresh, the originally affected phone roles still had no observed v109 uploads. The private audit holds the device-level evidence; none is included here.
 
 ## Separate Google test-crawler failure
 
@@ -128,3 +128,9 @@ Firebase issue `31e4148a1ff64120e09bcd92b84e229b` is a separate `FocusRingDrawab
 ## Google Play release notes
 
 Corregimos errores que podían cerrar la app o interrumpir el registro de uso. La actualización conserva los datos guardados y ayuda a reanudar su sincronización.
+
+## Google Play submission
+
+The verified candidate2 AAB was uploaded at approximately 12:42 UTC on 10 October 2026, after both signed upgrade gates passed. Its SHA-256 was independently rechecked immediately before upload and remains `92eb7d0f422c3a3f7965d87a07e47857917b45ade247ae7eb63931f6ed0b6d89`. Play recognized version code/name 111, target SDK 36, and attached mapping/native symbols. The preview reported no change in supported devices.
+
+The production release retains the existing 100% rollout and all already targeted countries (Colombia); no availability settings were changed. "Send changes for review" was confirmed at approximately 12:44 UTC, and [Publishing overview](https://play.google.com/console/u/0/developers/5689648767328885776/app/4973458947249947064/publishing) then showed **Changes in review: Production, 111 (111), Start full rollout**. Automated checks were still running, with review to follow successful completion. Managed publishing remains off, so approval will permit automatic publication. This is a submission receipt, not evidence that participants can already install v111; v109 was the live release at submission.
