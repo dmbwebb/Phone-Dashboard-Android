@@ -11,8 +11,8 @@ android {
         applicationId project.findProperty("releaseApplicationId") ?: "com.miritmodigital.app"
         minSdkVersion 24
         targetSdk 36
-        versionCode 109
-        versionName "109"
+        versionCode 110
+        versionName "110"
         testInstrumentationRunner project.hasProperty('compressionRecoveryE2E')
                 ? 'com.audacious_software.phone_dashboard.CompressionRecoveryTestRunner'
                 : project.hasProperty('reliabilityE2E')
