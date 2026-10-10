@@ -34,6 +34,9 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--avd", default="MRD_API34_Reliability")
     parser.add_argument("--serial", default="emulator-5580")
+    parser.add_argument("--memory-mb", type=int, choices=(2048, 4096), default=2048)
+    parser.add_argument("--wait-for-system-idle", action="store_true",
+                        help="Require Android broadcast loopers/queues to settle before installation")
     args = parser.parse_args()
     if not args.serial.startswith("emulator-"):
         raise ValueError("Physical devices are forbidden")
@@ -171,13 +174,23 @@ def main():
         log_capture = None
         emulator = subprocess.Popen([str(SDK / "emulator/emulator"), "-avd", args.avd,
             "-port", args.serial.split("-")[1], "-no-window", "-no-audio", "-no-snapshot",
-            "-no-boot-anim", "-gpu", "swiftshader_indirect", "-cores", "2"], stdout=log, stderr=log)
+            "-no-boot-anim", "-gpu", "swiftshader_indirect", "-cores", "2",
+            "-memory", str(args.memory_mb)], stdout=log, stderr=log)
         try:
             wait_boot(args.serial)
             isolate_network()
+            if args.wait_for_system_idle:
+                progress("WAIT Android broadcast loopers and queues to become idle")
+                idle_output = adb(args.serial, "shell", "cmd", "activity", "wait-for-broadcast-idle",
+                                  "--flush-broadcast-loopers", timeout=120)
+                (args.output / "system-idle.txt").write_text(idle_output)
+                if "All broadcast queues are idle!" not in idle_output:
+                    raise AssertionError("Android did not confirm idle broadcast queues")
+                progress("PASS Android broadcast loopers and queues are idle before APK installation")
             metadata = {name: adb(args.serial, "shell", "getprop", name).strip() for name in
                         ("ro.build.version.sdk", "ro.build.version.release", "ro.product.cpu.abi")}
             metadata["page_size"] = adb(args.serial, "shell", "getconf", "PAGESIZE").strip()
+            metadata["emulator_memory_mb"] = args.memory_mb
             (args.output / "device.json").write_text(json.dumps(metadata, indent=2))
             for device_port, host_port in ((8765, plain.server_port), (8766, secure.server_port)):
                 adb(args.serial, "reverse", "tcp:" + str(device_port), "tcp:" + str(host_port))

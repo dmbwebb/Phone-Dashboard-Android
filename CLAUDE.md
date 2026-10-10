@@ -1,0 +1,4 @@
+# Android release checks
+
+- Database-recovery acceptance requires the signed, minified retained-data upgrade to repair every active schema, preserve history and queued uploads, collect a genuinely new raw usage event, and check complete post-upgrade logs for schema/fatal/native errors and ANRs; an upload can succeed while MainActivity crashes. Follow [the release-testing recipe](docs/release-111-database-recovery.md#reproducing-release-checks), including serial low-priority execution and isolated synthetic emulators.
+- Emulator startup timeouts across system services can require `nice -n 19` without extra `taskpolicy -b` background QoS; preserve two emulator cores and low CPU priority, retain failure evidence, and use the bounded readiness checks in the release recipe. Builds and JVM tests remain `nice -n 19 taskpolicy -b` with one Gradle worker.
