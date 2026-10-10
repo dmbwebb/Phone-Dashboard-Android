@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.audacious_software.passive_data_kit.PassiveDataKit;
 import com.audacious_software.passive_data_kit.generators.Generators;
@@ -133,7 +134,10 @@ public class ForegroundDatabaseRecoveryInstrumentedTest {
                 assertEquals(fixture.file, 7, row.getInt(row.getColumnIndexOrThrow("fetched")));
                 assertEquals(fixture.file, 0, row.getInt(row.getColumnIndexOrThrow("transmitted")));
                 if (fixture == ExtraDatabase.DAILY) {
-                    assertEquals(1, row.getInt(row.getColumnIndexOrThrow("pending_delivery")));
+                    // Startup can already have durably queued this pending row. The
+                    // host requires its delivery, then checks the cleared flag below.
+                    int pending = row.getInt(row.getColumnIndexOrThrow("pending_delivery"));
+                    assertTrue(pending == 0 || pending == 1);
                     assertEquals(60000, row.getLong(row.getColumnIndexOrThrow("total_ms")));
                 } else if (fixture == ExtraDatabase.SYSTEM) {
                     assertEquals(1234, row.getLong(row.getColumnIndexOrThrow("system_runtime")));
@@ -187,6 +191,25 @@ public class ForegroundDatabaseRecoveryInstrumentedTest {
         } catch (SQLiteException expected) {
             assertTrue(expected.getMessage(), expected.getMessage().contains("table history already exists"));
         }
+        Bundle evidence = new Bundle();
+        evidence.putLong("database_fixture_observed", observed);
+        InstrumentationRegistry.getInstrumentation().sendStatus(0, evidence);
+    }
+
+    @Test public void deliveredAggregateClearsPendingFlag() {
+        long deadline = SystemClock.elapsedRealtime() + 15000;
+        do {
+            try (SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(database(ExtraDatabase.DAILY), null);
+                 Cursor row = db.rawQuery("SELECT pending_delivery, total_ms, observed FROM history WHERE _id=424242", null)) {
+                assertTrue("Delivered row must remain in history", row.moveToFirst());
+                assertEquals(60000, row.getLong(1));
+                assertEquals(PreferenceManager.getDefaultSharedPreferences(context())
+                        .getLong("database_recovery_fixture_observed", -1), row.getLong(2));
+                if (row.getInt(0) == 0) return;
+            }
+            SystemClock.sleep(100);
+        } while (SystemClock.elapsedRealtime() < deadline);
+        fail("Delivered retained aggregate still marked pending");
     }
 
     @Test public void upgradedDatabaseKeepsHistoryAndCanReopen() throws Exception {

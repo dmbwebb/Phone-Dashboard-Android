@@ -64,6 +64,7 @@ def main():
         if "OK (1 test)" not in output:
             raise AssertionError("Instrumentation failed: " + method + "\n" + output)
         progress("PASS " + method)
+        return output
 
     def delivered(marker, compression):
         with Receiver.lock:
@@ -78,6 +79,29 @@ def main():
                 return
             time.sleep(1)
         raise AssertionError("Retained record did not arrive: " + marker)
+
+    def retained_aggregate(observed):
+        with Receiver.lock:
+            for request in Receiver.requests:
+                for row in request["records"]:
+                    metadata = row.get("passive-data-metadata", {})
+                    if (metadata.get("generator-id") == "pdk-daily-usage-aggregate"
+                            and row.get("package") == "retained.synthetic.app"
+                            and row.get("observed") == observed
+                            and row.get("day_bucket") == observed
+                            and row.get("total_ms") == 60000):
+                        return row
+        return None
+
+    def await_retained_aggregate(observed):
+        deadline = time.monotonic() + 60
+        while time.monotonic() < deadline:
+            row = retained_aggregate(observed)
+            if row is not None:
+                (args.output / "retained-aggregate.json").write_text(json.dumps(row, indent=2))
+                return
+            time.sleep(1)
+        raise AssertionError("Pre-upgrade pending aggregate was not delivered")
 
     def isolate_network():
         # Connectivity's airplane-mode command works on images without a phone
@@ -162,7 +186,11 @@ def main():
                                capture_output=True, check=False, timeout=30)
             adb(args.serial, "install", str(args.baseline))
             adb(args.serial, "install", str(args.test_apk))
-            instrument(DATABASE_TEST, "seedInterruptedV109DatabaseAndConfirmCrash")
+            seed_output = instrument(DATABASE_TEST, "seedInterruptedV109DatabaseAndConfirmCrash")
+            observed = re.search(r"INSTRUMENTATION_STATUS: database_fixture_observed=(\d+)", seed_output)
+            if observed is None:
+                raise AssertionError("Baseline fixture did not report its retained observation timestamp")
+            retained_observed = int(observed.group(1))
             adb(args.serial, "shell", "am", "force-stop", PKG)
             adb(args.serial, "logcat", "-c")
             adb(args.serial, "shell", "am", "start", "-W", "-n",
@@ -182,6 +210,8 @@ def main():
             adb(args.serial, "shell", "am", "force-stop", PKG)
             if delivered(RETAINED_MARKER, "none"):
                 raise AssertionError("The pre-upgrade fixture record was sent before the update")
+            if retained_aggregate(retained_observed) is not None:
+                raise AssertionError("The pending aggregate was sent before the update")
             # install -r preserves preferences, SQLite data and upload queue.
             adb(args.serial, "install", "-r", str(args.current))
             adb(args.serial, "logcat", "-c")
@@ -196,6 +226,9 @@ def main():
                 PKG + "/com.audacious_software.phone_dashboard.MainActivity")
             await_delivery(RETAINED_MARKER, "none")
             progress("PASS original queued record delivered after retained-data update")
+            await_retained_aggregate(retained_observed)
+            instrument(DATABASE_TEST, "deliveredAggregateClearsPendingFlag")
+            progress("PASS pre-upgrade pending aggregate delivered intact and flag cleared")
             instrument(COMPRESSION_TEST, "retainedNativeBindingsWorkInMinifiedRelease")
             instrument(COMPRESSION_TEST, "prepareQueuedCompressedPayloadForNormalColdStart")
             upgrade_log = adb(args.serial, "logcat", "-d")
