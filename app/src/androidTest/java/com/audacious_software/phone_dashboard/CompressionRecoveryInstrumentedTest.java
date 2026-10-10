@@ -139,8 +139,22 @@ public class CompressionRecoveryInstrumentedTest {
         assertTrue(schedule.refreshMonitoringConfiguration());
         HttpTransmitter transmitter = activeTransmitter();
         ((android.app.job.JobScheduler) context().getSystemService(Context.JOB_SCHEDULER_SERVICE)).cancelAll();
-        enqueue(transmitter, "normal-application-cold-start");
         transmitter.deinitialize(context());
+        // Stage durably without racing the old uploader's initial drain or a
+        // persisted retry. The next normal app process uses its real uploader.
+        HttpTransmitter dormant = new HttpTransmitter() {
+            @Override public synchronized boolean transmit(boolean force) { return false; }
+        };
+        HashMap<String, String> options = new HashMap<>();
+        options.put(HttpTransmitter.USER_ID, ID);
+        options.put(HttpTransmitter.UPLOAD_URI, "https://127.0.0.1:8766/upload");
+        options.put(HttpTransmitter.COMPRESS_PAYLOADS, "true");
+        options.put(HttpTransmitter.STRICT_SSL_VERIFICATION, "false");
+        options.put(HttpTransmitter.WIFI_ONLY, "false");
+        options.put(HttpTransmitter.CHARGING_ONLY, "false");
+        dormant.initialize(context(), options);
+        enqueue(dormant, "normal-application-cold-start");
+        dormant.deinitialize(context());
         assertTrue(new JSONObject(prefs().getString(Schedule.SAVED_CONFIGURATION, "{}"))
                 .getJSONArray("transmitters").getJSONObject(0).getBoolean("compression"));
     }

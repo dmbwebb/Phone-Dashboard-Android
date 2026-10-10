@@ -57,19 +57,17 @@ public class AppSnoozeGenerator extends Generator {
 
         this.mDatabase = SQLiteDatabase.openOrCreateDatabase(path, null);
 
-        int version = this.getDatabaseVersion(this.mDatabase);
-
-        switch (version) {
-            case 0:
-                this.mDatabase.execSQL(this.mContext.getString(R.string.generator_app_snooze_create_history_table));
-            case 1:
-                this.mDatabase.execSQL(this.mContext.getString(R.string.generator_app_snooze_add_original_budget));
-                this.mDatabase.execSQL(this.mContext.getString(R.string.generator_app_snooze_add_remaining_budget));
-        }
-
-        if (version != AppSnoozeGenerator.DATABASE_VERSION) {
-            this.setDatabaseVersion(this.mDatabase, AppSnoozeGenerator.DATABASE_VERSION);
-        }
+        this.initializeDatabase(this.mDatabase, AppSnoozeGenerator.DATABASE_VERSION, (database, oldVersion) -> {
+            if (!tableExists(database, AppSnoozeGenerator.TABLE_HISTORY)) {
+                database.execSQL(this.mContext.getString(R.string.generator_app_snooze_create_history_table));
+            }
+            if (!columnExists(database, AppSnoozeGenerator.TABLE_HISTORY, AppSnoozeGenerator.HISTORY_ORIGINAL_BUDGET)) {
+                database.execSQL(this.mContext.getString(R.string.generator_app_snooze_add_original_budget));
+            }
+            if (!columnExists(database, AppSnoozeGenerator.TABLE_HISTORY, AppSnoozeGenerator.HISTORY_REMAINING_BUDGET)) {
+                database.execSQL(this.mContext.getString(R.string.generator_app_snooze_add_remaining_budget));
+            }
+        });
     }
 
     @SuppressWarnings("unused")

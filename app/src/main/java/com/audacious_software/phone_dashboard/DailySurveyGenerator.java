@@ -75,24 +75,30 @@ public class DailySurveyGenerator extends Generator {
         path = new File(path, DailySurveyGenerator.DATABASE_PATH);
         this.mDatabase = SQLiteDatabase.openOrCreateDatabase(path, null);
 
-        int version = this.getDatabaseVersion(this.mDatabase);
-        switch (version) {
-            case 0:
-                this.mDatabase.execSQL(this.mContext.getString(R.string.generator_daily_survey_create_responses_table));
-                break;
-            case 1:
-            case 2:
-                // Pre-release schema changes (single-question -> multi-question survey;
-                // then the other_text column). No shipped data exists, so drop and
-                // recreate with the current schema.
-                this.mDatabase.execSQL("DROP TABLE IF EXISTS " + DailySurveyGenerator.TABLE_RESPONSES);
-                this.mDatabase.execSQL(this.mContext.getString(R.string.generator_daily_survey_create_responses_table));
-                break;
-        }
+        this.initializeDatabase(this.mDatabase, DailySurveyGenerator.DATABASE_VERSION, (database, oldVersion) -> {
+            if (tableExists(database, DailySurveyGenerator.TABLE_RESPONSES)) {
+                if (hasCurrentResponsesSchema(database)) {
+                    return;
+                }
+                // Keep incompatible prerelease answers locally without interpreting
+                // them as current responses. A stale marker alone never moves rows.
+                preserveLegacyTable(database, DailySurveyGenerator.TABLE_RESPONSES,
+                        "responses_legacy_v" + oldVersion);
+            }
+            database.execSQL(this.mContext.getString(R.string.generator_daily_survey_create_responses_table));
+        });
+    }
 
-        if (version != DailySurveyGenerator.DATABASE_VERSION) {
-            this.setDatabaseVersion(this.mDatabase, DailySurveyGenerator.DATABASE_VERSION);
+    private static boolean hasCurrentResponsesSchema(SQLiteDatabase database) {
+        String[] columns = {"_id", HISTORY_FETCHED, HISTORY_TRANSMITTED, HISTORY_OBSERVED,
+                SURVEY_ID, QUESTION_KEY, QUESTION_TEXT, QUESTION_TYPE, RESPONSE_VALUES,
+                RESPONSE_LABELS, OTHER_TEXT, DISMISSED, PROMPT_SHOWN_AT, RESPONDED_AT, ENGINE};
+        for (String column : columns) {
+            if (!columnExists(database, DailySurveyGenerator.TABLE_RESPONSES, column)) {
+                return false;
+            }
         }
+        return true;
     }
 
     @SuppressWarnings("unused")

@@ -61,16 +61,11 @@ public class DailyBudgetGenerator extends Generator {
 
         this.mDatabase = SQLiteDatabase.openOrCreateDatabase(path, null);
 
-        int version = this.getDatabaseVersion(this.mDatabase);
-
-        switch (version) {
-            case 0:
-                this.mDatabase.execSQL(this.mContext.getString(R.string.generator_daily_app_budget_create_history_table));
-        }
-
-        if (version != DailyBudgetGenerator.DATABASE_VERSION) {
-            this.setDatabaseVersion(this.mDatabase, DailyBudgetGenerator.DATABASE_VERSION);
-        }
+        this.initializeDatabase(this.mDatabase, DailyBudgetGenerator.DATABASE_VERSION, (database, oldVersion) -> {
+            if (!tableExists(database, DailyBudgetGenerator.TABLE_HISTORY)) {
+                database.execSQL(this.mContext.getString(R.string.generator_daily_app_budget_create_history_table));
+            }
+        });
     }
 
     @SuppressWarnings("unused")
