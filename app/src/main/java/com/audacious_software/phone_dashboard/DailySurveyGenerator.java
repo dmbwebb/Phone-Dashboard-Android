@@ -55,6 +55,7 @@ public class DailySurveyGenerator extends Generator {
     public static final String PROMPT_SHOWN_AT = "prompt_shown_at";
     public static final String RESPONDED_AT = "responded_at";
     public static final String ENGINE = "engine";
+    public static final String CHOICE_ORDER = "choice_order";
 
     private SQLiteDatabase mDatabase = null;
 
@@ -185,6 +186,10 @@ public class DailySurveyGenerator extends Generator {
         update.putLong(DailySurveyGenerator.PROMPT_SHOWN_AT, promptShownAt);
         update.putLong(DailySurveyGenerator.RESPONDED_AT, respondedAt);
         update.putString(DailySurveyGenerator.ENGINE, engineName);
+        if (question.choiceOrder != null) {
+            // Transmitted only; the local table keeps its schema.
+            update.putString(DailySurveyGenerator.CHOICE_ORDER, question.choiceOrder);
+        }
 
         Generators.getInstance(this.mContext).notifyGeneratorUpdated(DailySurveyGenerator.GENERATOR_IDENTIFIER, update);
     }

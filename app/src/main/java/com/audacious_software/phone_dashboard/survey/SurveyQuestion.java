@@ -23,15 +23,32 @@ public class SurveyQuestion {
     // 0-based index of an "other" option that opens a free-text box the participant
     // must fill in, or -1 if the question has none.
     public final int otherIndex;
+    // Stored value for each on-screen position, so a question can show its choices
+    // in a varying order while the data keeps one coding. Null means position + 1.
+    private final int[] choiceValues;
+    // Which on-screen order this prompt used (e.g. "ascending"), sent with the
+    // answer; null for questions whose order never varies.
+    public final String choiceOrder;
 
     public SurveyQuestion(String questionKey, String questionText, Type type,
                           String[] choiceLabels, int exclusiveIndex, int otherIndex) {
+        this(questionKey, questionText, type, choiceLabels, exclusiveIndex, otherIndex, null, null);
+    }
+
+    public SurveyQuestion(String questionKey, String questionText, Type type,
+                          String[] choiceLabels, int exclusiveIndex, int otherIndex,
+                          int[] choiceValues, String choiceOrder) {
+        if (choiceValues != null && choiceValues.length != choiceLabels.length) {
+            throw new IllegalArgumentException("choiceValues must match choiceLabels");
+        }
         this.questionKey = questionKey;
         this.questionText = questionText;
         this.type = type;
         this.choiceLabels = choiceLabels;
         this.exclusiveIndex = exclusiveIndex;
         this.otherIndex = otherIndex;
+        this.choiceValues = choiceValues;
+        this.choiceOrder = choiceOrder;
     }
 
     /** True when the choice at {@code index} is the write-in "other" option. */
@@ -41,7 +58,17 @@ public class SurveyQuestion {
 
     /** 1-based stored value for the choice at {@code index}. */
     public int valueForIndex(int index) {
-        return index + 1;
+        return this.choiceValues != null ? this.choiceValues[index] : index + 1;
+    }
+
+    /** On-screen position of the choice stored as {@code value}, or -1 if none. */
+    public int indexForValue(int value) {
+        for (int i = 0; i < this.choiceLabels.length; i++) {
+            if (this.valueForIndex(i) == value) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public String labelForIndex(int index) {

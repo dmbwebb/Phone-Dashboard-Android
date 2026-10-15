@@ -103,8 +103,8 @@ public class SurveyActivity extends AppCompatActivity {
         this.setContentView(R.layout.activity_survey);
 
         this.mEngine = SurveyEngines.forContext(this);
-        this.mSurvey = this.mEngine.currentSurvey(this);
         this.mPromptShownAt = this.getIntent().getLongExtra(SurveyScheduler.EXTRA_PROMPT_SHOWN_AT, System.currentTimeMillis());
+        this.mSurvey = this.mEngine.currentSurvey(this, this.mPromptShownAt);
 
         SurveyScheduler.cancelNotification(this);
 
@@ -199,7 +199,10 @@ public class SurveyActivity extends AppCompatActivity {
 
             if (previous != null && previous.values.length > 0) {
                 // Restore the earlier choice so Back-then-forward keeps the answer.
-                this.selectSingleChoice(question, previous.values[0] - 1);
+                int position = question.indexForValue(previous.values[0]);
+                if (position >= 0) {
+                    this.selectSingleChoice(question, position);
+                }
             }
 
             // Nothing to continue past until a choice is on screen; a plain choice
@@ -310,7 +313,7 @@ public class SurveyActivity extends AppCompatActivity {
         // Restore the earlier selection without re-running the exclusivity rules.
         this.mUpdatingChecks = true;
         for (int value : previous.values) {
-            int position = value - 1;
+            int position = question.indexForValue(value);
             if (position >= 0 && position < this.mCheckBoxes.size()) {
                 this.mCheckBoxes.get(position).setChecked(true);
             }

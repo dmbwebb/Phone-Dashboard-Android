@@ -360,16 +360,15 @@
         <item>Other</item>
     </string-array>
 
-    <string name="survey_q_current_affect">Right now, do you feel any of these?</string>
-    <string-array name="survey_opts_current_affect">
-        <item>Happy</item>
-        <item>Calm</item>
-        <item>Excited</item>
-        <item>Sad</item>
-        <item>Worried</item>
-        <item>Irritated</item>
-        <item>Bored</item>
-        <item>None of these</item>
+    <string name="survey_q_mood_valence">How do you feel right now?</string>
+    <!-- Canonical order, worst to best: the stored value is position + 1 whichever
+         direction the screen shows them in. -->
+    <string-array name="survey_opts_mood_valence">
+        <item>😢 Very bad</item>
+        <item>🙁 Bad</item>
+        <item>😐 So-so</item>
+        <item>🙂 Good</item>
+        <item>😄 Very good</item>
     </string-array>
 
     <string name="survey_q_sleep_hours">How many hours did you sleep last night?</string>

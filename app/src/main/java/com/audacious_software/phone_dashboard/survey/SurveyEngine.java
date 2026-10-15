@@ -14,6 +14,10 @@ public interface SurveyEngine {
     /** Stored on every data point as the {@code engine} field. */
     String engineName();
 
-    /** The survey to present tonight (questions shown one at a time). */
-    Survey currentSurvey(Context context);
+    /**
+     * The survey to present for one prompt (questions shown one at a time).
+     * {@code promptShownAt} identifies the prompt, so anything varied per prompt
+     * (such as choice order) stays the same if the screen is rebuilt.
+     */
+    Survey currentSurvey(Context context, long promptShownAt);
 }

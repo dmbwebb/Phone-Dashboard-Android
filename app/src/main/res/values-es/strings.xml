@@ -302,16 +302,13 @@
         <item>Otra cosa</item>
     </string-array>
 
-    <string name="survey_q_current_affect">En este momento, ¿sientes alguna de estas?</string>
-    <string-array name="survey_opts_current_affect">
-        <item>Alegre</item>
-        <item>Tranquilo/a</item>
-        <item>Emocionado/a</item>
-        <item>Triste</item>
-        <item>Preocupado/a</item>
-        <item>Irritado/a</item>
-        <item>Aburrido/a</item>
-        <item>Ninguna de estas</item>
+    <string name="survey_q_mood_valence">¿Cómo te sientes en este momento?</string>
+    <string-array name="survey_opts_mood_valence">
+        <item>😢 Muy mal</item>
+        <item>🙁 Mal</item>
+        <item>😐 Más o menos</item>
+        <item>🙂 Bien</item>
+        <item>😄 Muy bien</item>
     </string-array>
 
     <string name="survey_q_sleep_hours">¿Cuántas horas dormiste anoche?</string>
