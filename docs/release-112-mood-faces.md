@@ -18,6 +18,12 @@ No database, upload, scheduling or permission code changed.
 
 New JVM tests: `ScriptedSurveyEngineTest` (one value coding in both orders, the order stable per prompt and between 47% and 53% best-first over 20,000 daily prompts, v2 question set) and `SurveyActivityPolicyTest.childMoodAnswerIsRestoredByValueWhenFacesAreShownBestFirst` (a child answers "Mal" on a best-first prompt, goes Back, and the same face is shown as selected; the v1 restore rule would have selected the wrong one).
 
+Signed release build: `MiRitmoDigital-v112.aab` SHA-256 `6252d90e4db431a547f10710a9a24e27314063f2f773f7bca7d3662eb2291621`, APK `a891695838ba23665f69aea218b2d471d4b2748797054777b214621b68f69916`; version code/name 112, target SDK 36, not debuggable, signing certificate `a4f38dc9…a54a` (unchanged). Full release JVM suite: 92 tests, 0 failures. An isolated API 34 emulator (airplane mode) upgraded the signed v111 APK to v112 with `adb install -r`; MainActivity opened OnboardingActivity in 580 ms with no fatal, SQLite, native-link or ANR log line. The survey screen itself was not reached on the emulator (no enrolled identity). Artifacts and evidence: `~/Downloads/MRD-v112-20261015/`.
+
 ## Google Play release notes
 
 Mejoramos la encuesta corta de la app: ahora puedes contar cómo te sientes con un solo toque.
+
+## Google Play submission
+
+Submitted 15 October 2026 at about 16:42 UTC into production draft release 8: bundle 112 only (111 not included), es-419 notes above, 100% rollout, all targeted countries; the review page reported no errors, warnings or device-support changes. Publishing overview then showed "Changes in review: Production, 112 (112), Start full rollout" with quick checks running. Managed publishing is off, so approval publishes automatically. This is a submission receipt, not evidence that phones have v112.
